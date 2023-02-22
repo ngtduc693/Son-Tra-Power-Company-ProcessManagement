@@ -13,8 +13,11 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { collection, doc, setDoc , getDocs, query, where} from "firebase/firestore"; 
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {db} from '../components/firebase.js';
 
 // react-router-dom components
@@ -30,7 +33,7 @@ import MuiLink from "@mui/material/Link";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
-
+import MDAlert from "components/MDAlert";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -40,6 +43,7 @@ import MDButton from "components/MDButton";
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
+
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
@@ -48,19 +52,51 @@ function Basic() {
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [user, setUser] = useState([]);
- 
-const fetchPost = async () => {
-   
-    await getDocs(collection(db, "Auth"))
-        .then((querySnapshot)=>{               
-            const newData = querySnapshot.docs
-                .map((doc) => ({...doc.data(), id:doc.id }));
-                setUser(newData);                
-            console.log(user, newData);
-        })
-   
-}
+  const [role, setRole] = useState([]);
+  const [isSuccess, setIsSuccess] = useState(null);
 
+
+const HandleSubmit = async(e) => {
+  //Prevent page reload
+  e.preventDefault();
+  const email = e.target[0].value ;
+  const password = e.target[2].value ;
+  const q = query(collection(db,'Auth'),where('Email', '==', email));
+  const querySnapshot = await getDocs(q);
+  let docids = [];
+  let data = [];
+  
+  querySnapshot.forEach((doc) => {
+    docids = [...docids, doc.id];
+    data = [...data,doc.data()]
+  });
+  if (docids.length > 0){
+    setUser(data[0].Email)
+    setRole(data[0].Role)
+    setIsSuccess(true);
+  }
+  else{
+    setUser(null);
+    setRole(null);
+    setIsSuccess(false);
+  }
+  
+};
+let message = null;
+if (isSuccess){
+  message = toast.success("Đăng nhập thành công",{
+    autoClose: 3000, 
+    closeOnClick: true, 
+    position: "bottom-right" 
+  });
+}
+if (isSuccess == false){
+  message = toast.error("Đăng nhập thất bại",{
+    autoClose: 3000, 
+    closeOnClick: true, 
+    position: "bottom-right" 
+  });
+}
 
   return (
     <BasicLayout image={bgImage}>
@@ -118,7 +154,7 @@ const fetchPost = async () => {
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form" onSubmit = "handleSubmit()">
+          <MDBox component="form" role="form" onSubmit = {HandleSubmit}>
             <MDBox mb={2}>
               <MDInput type="email" label="Email" fullWidth />
             </MDBox>
@@ -138,7 +174,7 @@ const fetchPost = async () => {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton variant="gradient" color="info" fullWidth type="submit">
                 Đăng nhập
               </MDButton>
             </MDBox>
@@ -159,8 +195,12 @@ const fetchPost = async () => {
             </MDBox> */}
           </MDBox>
         </MDBox>
+        
       </Card>
+      <ToastContainer position="bottom-right" limit={1}/>
+      {message}
     </BasicLayout>
+     
   );
 }
 
