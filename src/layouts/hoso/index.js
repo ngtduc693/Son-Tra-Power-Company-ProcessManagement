@@ -13,7 +13,7 @@ import ContractDocument from "./components/contract.js";
 function HoSo() {
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      {/* <DashboardNavbar /> */}
       <CreateDocument/>
       <Footer />
     </DashboardLayout>

@@ -12,10 +12,11 @@ import { ThoaThuanDauNoi } from "layouts/hoso";
 const routes = [
   {
     type: "collapse",
-    name: "Tạo hồ sơ",
-    key: "taohoso",
+    name: "Quản lý hồ sơ",
+    title: "Quản lý hồ sơ",
+    key: "quanlyhoso",
     icon: <Icon fontSize="small">post_add</Icon>,
-    route: "/taohoso",
+    route: "/quanlyhoso",
     component: <HoSo />
   },
   {

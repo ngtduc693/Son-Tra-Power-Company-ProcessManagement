@@ -1,5 +1,3 @@
-
-
 import { useEffect } from "react";
 
 // react-router-dom components
@@ -13,7 +11,8 @@ import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React context
 import { useMaterialUIController, setLayout } from "context";
-import bgImage from "../../../assets/images/bg-sign-in-basic.jpeg";
+import bgImage from "../../../assets/images/bg-profile.jpeg";
+import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 function DashboardLayout({ children }) {
   const [controller, dispatch] = useMaterialUIController();
@@ -25,22 +24,29 @@ function DashboardLayout({ children }) {
   }, [pathname]);
 
   return (
-    <MDBox 
-      sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
-        p: 3,
-        position: "relative",
-
-        [breakpoints.up("xl")]: {
-          marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
-          transition: transitions.create(["margin-left", "margin-right"], {
-            easing: transitions.easing.easeInOut,
-            duration: transitions.duration.standard,
-          }),
-        },
-      })}
+    <div
+      style={{
+        backgroundImage: `url(${bgImage})`,
+      }}
     >
-      {children}
-    </MDBox>
+      <MDBox
+        sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
+          p: 3,
+          position: "relative",
+          zIndex: 0,
+          [breakpoints.up("xl")]: {
+            marginLeft: 5,
+            marginRight: 5,
+            transition: transitions.create(["margin-left", "margin-right"], {
+              easing: transitions.easing.easeInOut,
+              duration: transitions.duration.standard,
+            }),
+          },
+        })}
+      >
+        {children}
+      </MDBox>
+    </div>
   );
 }
 

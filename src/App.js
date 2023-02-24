@@ -134,14 +134,15 @@ export default function App() {
       <CssBaseline />
       {layout === "dashboard" && (
         <>
-          <Sidenav
+          {/* <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="ĐL Sơn Trà"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
-          />
+            width="0%"
+          /> */}
           <Configurator />
           {configsButton}
         </>
@@ -149,7 +150,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/taohoso" />} />
+        <Route path="*" element={<Navigate to="/quanlyhoso" />} />
       </Routes>
     </ThemeProvider>
   )
