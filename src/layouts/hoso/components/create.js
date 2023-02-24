@@ -73,7 +73,7 @@ function GetNextStep({currentStep,documentId,documentData}) {
       </div>
     );
   }
-  if (currentStep === "Đấu nối") {
+  if (currentStep === "Thoả thuận Đấu nối") {
     return (
       <div>
         <MDButton variant="contained" color="success" onClick={handleOpen}>
@@ -152,12 +152,12 @@ function CreateDocument() {
             BuocTiep:
             <GetNextStep documentId={current.MaHoSo} documentData = {current} currentStep={
               current.NgayNopHoSoDayDu == null?"Xác nhận đủ HS":
-              current.NgayNopHoSoDayDu != null &&
-              current.NgayChuyenVePKT === null
+              (current.NgayNopHoSoDayDu != null &&
+              (current.NgayChuyenVePKT === null || current.NgayChuyenVePKT === undefined) )
               ? "Chuyển về công ty"
-              : current.NgayNopHoSoDayDu != null &&
-                current.NgayChuyenVePKT != null && current.NgayChuyenHoSoThoaThuan === null
-              ? "Đấu nối"
+              : (current.NgayNopHoSoDayDu != null &&
+                current.NgayChuyenVePKT != null && (current.NgayChuyenHoSoThoaThuan === undefined || current.NgayChuyenHoSoThoaThuan === null))
+              ? "Thoả thuận Đấu nối"
               : "Hoàn tất"}  ></GetNextStep>
             
           };
