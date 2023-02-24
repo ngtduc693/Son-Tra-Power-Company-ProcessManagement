@@ -1,14 +1,13 @@
 import HoSo from "layouts/hoso";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
-import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import { ChuyenHoSoSangDienLuc } from "layouts/hoso";
+import { Thoa } from "layouts/hoso";
+import { ThoaThuanDauNoi } from "layouts/hoso";
 
 const routes = [
   {
@@ -25,7 +24,7 @@ const routes = [
     key: "chuyenhoso",
     icon: <Icon fontSize="small">content_paste_go</Icon>,
     route: "/chuyenhoso",
-    component: <SignIn />
+    component: <ChuyenHoSoSangDienLuc />
   },
   {
     type: "collapse",
@@ -33,7 +32,7 @@ const routes = [
     key: "thoathuandaunoi",
     icon: <Icon fontSize="small">gavel</Icon>,
     route: "/thoathuandaunoi",
-    component: <Tables />,
+    component: <ThoaThuanDauNoi />,
   },
   {
     type: "collapse",

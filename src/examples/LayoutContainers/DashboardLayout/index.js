@@ -13,6 +13,7 @@ import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React context
 import { useMaterialUIController, setLayout } from "context";
+import bgImage from "../../../assets/images/bg-sign-in-basic.jpeg";
 
 function DashboardLayout({ children }) {
   const [controller, dispatch] = useMaterialUIController();
@@ -24,7 +25,7 @@ function DashboardLayout({ children }) {
   }, [pathname]);
 
   return (
-    <MDBox
+    <MDBox 
       sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
         p: 3,
         position: "relative",
