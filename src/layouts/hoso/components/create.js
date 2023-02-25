@@ -23,8 +23,8 @@ import { Link } from "react-router-dom";
 import DateTimePickerModalStep1 from "components/DateTimePickerModal/DateTimePickerModalStep1.js";
 import DateTimePickerModalStep2 from "components/DateTimePickerModal/DateTimePickerModalStep2.js";
 import DateTimePickerModalStep3 from "components/DateTimePickerModal/DateTimePickerModalStep3.js";
-import "firebase/storage";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
+import UploadFileDialog from "components/Dialog/UploadFileDialog.js";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -160,7 +160,6 @@ const getDayOfTime = (d1, d2) => {
 
 function CreateDocument() {
   const [isCreated, setIsCreated] = useState([]);
-  const [fileUrl, setFileUrl] = useState("");
   const [data, setData] = useState([]);
   async function fetchData() {
     const docData = await getDocuments();
@@ -248,31 +247,6 @@ function CreateDocument() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    const storageRef = ref(firebaseStorage, `/files/${file.name}`);
-
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        ); // update progress
-        setFileUrl(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-          setFileUrl(url);
-        });
-      }
-    );
-  };
-
   const columns = useMemo(() => COLUMNS, []);
   const tableInstance = useTable({ columns, data });
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -316,10 +290,12 @@ function CreateDocument() {
           <MDBox
             mb={2}
             display="grid"
-            gridTemplateColumns="10% 10% 60% 10% 10%"
-            gridgap="10px"
+            gridTemplateColumns="15% 15% 40% 15% 15%"
+            style={{ gridGap: "10px", paddingRight: "40px", boxSizing: "border-box" }}
+
           >
             <MDInput
+            style={{ gridColumn: "1 / span 1" }}
               type="text"
               label="Mã hồ sơ"
               required
@@ -327,6 +303,7 @@ function CreateDocument() {
               InputLabelProps={{ shrink: true }}
             />
             <MDInput
+            style={{ gridColumn: "2 / span 1" }}
               type="date"
               label="Ngày đề nghị đấu nối"
               required
@@ -335,6 +312,7 @@ function CreateDocument() {
               InputLabelProps={{ shrink: true }}
             />
             <MDInput
+            style={{ gridColumn: "3 / span 1" }}
               type="text"
               label="Tên khách hàng"
               required
@@ -343,6 +321,7 @@ function CreateDocument() {
               InputLabelProps={{ shrink: true }}
             />
             <MDInput
+            style={{ gridColumn: "4/ span 1" }}
               type="text"
               label="Công suất đề nghị"
               required
@@ -351,6 +330,7 @@ function CreateDocument() {
               InputLabelProps={{ shrink: true }}
             />
             <MDInput
+            style={{ gridColumn: "5 / span 1" }}
               type="date"
               label="Ngày nộp đầy đủ hồ sơ"
               fullWidth
@@ -362,32 +342,10 @@ function CreateDocument() {
           <MDBox
             mb={2}
             display="grid"
-            gridTemplateColumns="30% 10% 60%"
+            gridTemplateColumns="60% 40%"
             gridgap="10px"
           >
-            <MDInput
-              type="text"
-              label="Đường dẫn tệp"
-              fullWidth
-              disabled
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              value={fileUrl}
-            />
-            
-              <input
-                id="fileInput"
-                type="file"
-                onChange={handleFileUpload}
-                style={{ position: 'absolute',
-                width: '0',
-                height: '0',
-                opacity: '0',
-                overflow: 'hidden' }}
-              />
-              <MDBox style={{ display: 'flex', alignItems: 'center', marginLeft: '5px' }}>
-              <label htmlFor="fileInput">Chọn tệp...</label>
-              </MDBox>
+            <UploadFileDialog/>
             <MDButton variant="gradient" color="info" fullWidth type="submit">
               Tạo hồ sơ
             </MDButton>
