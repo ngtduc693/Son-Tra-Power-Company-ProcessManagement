@@ -235,7 +235,8 @@ function CreateDocument() {
   const HandleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
-    await addData('Documents',
+    
+    const result = await addData('Documents',
       {
         MaHoSo: e.target[0].value,
         NgayDeNghiDauNoi:  new Date(Date.parse(e.target[2].value)),
