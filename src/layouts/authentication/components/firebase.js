@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { collection, addDoc, query, getDocs, setDoc, doc } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -15,6 +16,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+export const firebaseApp = app;
+export const firebaseStorage = getStorage(app)
 export const db = getFirestore(app);
 
 export const addData = async (documentName, documentId, data) => {

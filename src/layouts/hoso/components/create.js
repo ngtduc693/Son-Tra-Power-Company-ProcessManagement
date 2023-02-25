@@ -10,7 +10,12 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { db, addData } from "../../authentication/components/firebase.js";
+import {
+  db,
+  addData,
+  firebaseApp,
+  firebaseStorage,
+} from "../../authentication/components/firebase.js";
 import DataTable from "examples/Tables/DataTable";
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -18,6 +23,9 @@ import { Link } from "react-router-dom";
 import DateTimePickerModalStep1 from "components/DateTimePickerModal/DateTimePickerModalStep1.js";
 import DateTimePickerModalStep2 from "components/DateTimePickerModal/DateTimePickerModalStep2.js";
 import DateTimePickerModalStep3 from "components/DateTimePickerModal/DateTimePickerModalStep3.js";
+import "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
@@ -44,12 +52,12 @@ function convertDateTimeToString(today) {
   return `${day}/${month}/${year}`;
 }
 function getCellStyle(rowData, rowIndex, colIndex) {
-  console.log(rowData)
+  console.log(rowData);
   if (rowData[colIndex] != "") {
     if (colIndex === 4) {
-      console.log(rowData[colIndex])
-      console.log(rowData[1])
-      console.log(getDayOfTime(rowData[colIndex], rowData[1]))
+      console.log(rowData[colIndex]);
+      console.log(rowData[1]);
+      console.log(getDayOfTime(rowData[colIndex], rowData[1]));
       if (getDayOfTime(rowData[colIndex], rowData[1]) > 1) {
         return {
           backgroundColor: "yellow",
@@ -80,7 +88,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
           currentStep={currentStep}
           documentId={documentId}
           documentData={documentData}
-          refresh = {refreshData}
+          refresh={refreshData}
         />
       </div>
     );
@@ -97,7 +105,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
           currentStep={currentStep}
           documentId={documentId}
           documentData={documentData}
-          refresh = {refreshData}
+          refresh={refreshData}
         />
       </div>
     );
@@ -114,7 +122,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
           currentStep={currentStep}
           documentId={documentId}
           documentData={documentData}
-          refresh = {refreshData}
+          refresh={refreshData}
         />
       </div>
     );
@@ -152,6 +160,7 @@ const getDayOfTime = (d1, d2) => {
 
 function CreateDocument() {
   const [isCreated, setIsCreated] = useState([]);
+  const [fileUrl, setFileUrl] = useState("");
   const [data, setData] = useState([]);
   async function fetchData() {
     const docData = await getDocuments();
@@ -159,6 +168,18 @@ function CreateDocument() {
       docData.map((current) => {
         return {
           ...current,
+          TepDinhKemLucTaoHoSo:
+            current.TepDinhKemLucTaoHoSo != undefined &&
+            current.TepDinhKemLucTaoHoSo != null &&
+            current.TepDinhKemLucTaoHoSo != "" ? (
+              <div>
+                <a href={current.TepDinhKemLucTaoHoSo} target="_blank">
+                  Xem tệp
+                </a>
+              </div>
+            ) : (
+              ""
+            ),
           NgayDeNghiDauNoi:
             current.NgayDeNghiDauNoi === undefined ||
             current.NgayDeNghiDauNoi === null
@@ -201,7 +222,7 @@ function CreateDocument() {
                 ),
           BuocTiep: (
             <GetNextStep
-              refreshData = {fetchData}
+              refreshData={fetchData}
               documentId={current.MaHoSo}
               documentData={current}
               currentStep={
@@ -225,9 +246,32 @@ function CreateDocument() {
     );
   }
   useEffect(() => {
-   
     fetchData();
   }, []);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const storageRef = ref(firebaseStorage, `/files/${file.name}`);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        ); // update progress
+        setFileUrl(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+          setFileUrl(url);
+        });
+      }
+    );
+  };
 
   const columns = useMemo(() => COLUMNS, []);
   const tableInstance = useTable({ columns, data });
@@ -237,34 +281,34 @@ function CreateDocument() {
   const HandleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
-    
-    const result = await addData('Documents',e.target[0].value,
-      {
-        MaHoSo: e.target[0].value,
-        NgayDeNghiDauNoi:  new Date(Date.parse(e.target[2].value)),
-        TenKhachHang: e.target[4].value,
-        CongSuatDeNghi: e.target[6].value,
-        NgayNopHoSoDayDu: e.target[8].value === "" ? null : new Date(Date.parse(e.target[8].value)),
-        TepDinhKemLucTaoHoSo: e.target[10].value 
-      });
-      if (result.includes('thành công')){
-        fetchData()
-        toast.success(result, {
-          autoClose: 3000,
-          closeOnClick: true,
-          position: "bottom-right",
-        }
 
-      )}
-      else{
-        toast.error(result, {
-          autoClose: 3000,
-          closeOnClick: true,
-          position: "bottom-right",
-        })
-      }
+    const result = await addData("Documents", e.target[0].value, {
+      MaHoSo: e.target[0].value,
+      NgayDeNghiDauNoi: new Date(Date.parse(e.target[2].value)),
+      TenKhachHang: e.target[4].value,
+      CongSuatDeNghi: e.target[6].value,
+      NgayNopHoSoDayDu:
+        e.target[8].value === ""
+          ? null
+          : new Date(Date.parse(e.target[8].value)),
+      TepDinhKemLucTaoHoSo: e.target[10].value,
+    });
+    if (result.includes("thành công")) {
+      fetchData();
+      toast.success(result, {
+        autoClose: 3000,
+        closeOnClick: true,
+        position: "bottom-right",
+      });
+    } else {
+      toast.error(result, {
+        autoClose: 3000,
+        closeOnClick: true,
+        position: "bottom-right",
+      });
+    }
   };
-  
+
   return (
     <MDBox mt={3}>
       <MDBox mb={3}>
@@ -318,7 +362,7 @@ function CreateDocument() {
           <MDBox
             mb={2}
             display="grid"
-            gridTemplateColumns="1fr 1fr"
+            gridTemplateColumns="30% 10% 60%"
             gridgap="10px"
           >
             <MDInput
@@ -328,7 +372,22 @@ function CreateDocument() {
               disabled
               variant="outlined"
               InputLabelProps={{ shrink: true }}
+              value={fileUrl}
             />
+            
+              <input
+                id="fileInput"
+                type="file"
+                onChange={handleFileUpload}
+                style={{ position: 'absolute',
+                width: '0',
+                height: '0',
+                opacity: '0',
+                overflow: 'hidden' }}
+              />
+              <MDBox style={{ display: 'flex', alignItems: 'center', marginLeft: '5px' }}>
+              <label htmlFor="fileInput">Chọn tệp...</label>
+              </MDBox>
             <MDButton variant="gradient" color="info" fullWidth type="submit">
               Tạo hồ sơ
             </MDButton>
