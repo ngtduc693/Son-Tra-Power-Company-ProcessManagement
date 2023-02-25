@@ -235,9 +235,15 @@ function CreateDocument() {
   const HandleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
-    let t = e.target;
-    console.log(t)
-    //addData();
+    await addData('Documents',
+      {
+        MaHoSo: e.target[0].value,
+        NgayDeNghiDauNoi:  new Date(Date.parse(e.target[2].value)),
+        TenKhachHang: e.target[4].value,
+        CongSuatDeNghi: e.target[6].value,
+        NgayNopHoSoDayDu: e.target[8].value === "" ? null : new Date(Date.parse(e.target[8].value)),
+        TepDinhKemLucTaoHoSo: e.target[10].value 
+      });
   };
 const message=null;
   if (isCreated === true) {
