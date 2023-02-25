@@ -10,7 +10,7 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { db } from "../../authentication/components/firebase.js";
+import { db, addData } from "../../authentication/components/firebase.js";
 import DataTable from "examples/Tables/DataTable";
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -43,8 +43,23 @@ function convertDateTimeToString(today) {
   const year = today.getFullYear();
   return `${day}/${month}/${year}`;
 }
-
-function GetNextStep({currentStep,documentId,documentData}) {
+function getCellStyle(rowData, rowIndex, colIndex) {
+  console.log(rowData)
+  if (rowData[colIndex] != "") {
+    if (colIndex === 4) {
+      console.log(rowData[colIndex])
+      console.log(rowData[1])
+      console.log(getDayOfTime(rowData[colIndex], rowData[1]))
+      if (getDayOfTime(rowData[colIndex], rowData[1]) > 1) {
+        return {
+          backgroundColor: "yellow",
+          color: "white",
+        };
+      }
+    }
+  }
+}
+function GetNextStep({ currentStep, documentId, documentData }) {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -53,13 +68,19 @@ function GetNextStep({currentStep,documentId,documentData}) {
   const handleOpen = () => {
     setOpen(true);
   };
-  if (currentStep === "Xác nhận đủ HS"){
+  if (currentStep === "Xác nhận đủ HS") {
     return (
       <div>
         <MDButton variant="contained" color="success" onClick={handleOpen}>
-        {currentStep}
+          {currentStep}
         </MDButton>
-        <DateTimePickerModalStep1 open={open} handleClose={handleClose} currentStep={currentStep} documentId = {documentId} documentData = {documentData}/>
+        <DateTimePickerModalStep1
+          open={open}
+          handleClose={handleClose}
+          currentStep={currentStep}
+          documentId={documentId}
+          documentData={documentData}
+        />
       </div>
     );
   }
@@ -67,9 +88,15 @@ function GetNextStep({currentStep,documentId,documentData}) {
     return (
       <div>
         <MDButton variant="contained" color="success" onClick={handleOpen}>
-        {currentStep}
+          {currentStep}
         </MDButton>
-        <DateTimePickerModalStep2 open={open} handleClose={handleClose} currentStep={currentStep} documentId = {documentId} documentData = {documentData}/>
+        <DateTimePickerModalStep2
+          open={open}
+          handleClose={handleClose}
+          currentStep={currentStep}
+          documentId={documentId}
+          documentData={documentData}
+        />
       </div>
     );
   }
@@ -77,20 +104,32 @@ function GetNextStep({currentStep,documentId,documentData}) {
     return (
       <div>
         <MDButton variant="contained" color="success" onClick={handleOpen}>
-        {currentStep}
+          {currentStep}
         </MDButton>
-        <DateTimePickerModalStep3 open={open} handleClose={handleClose} currentStep={currentStep} documentId = {documentId} documentData = {documentData}/>
+        <DateTimePickerModalStep3
+          open={open}
+          handleClose={handleClose}
+          currentStep={currentStep}
+          documentId={documentId}
+          documentData={documentData}
+        />
       </div>
     );
   }
   if (currentStep === "Hoàn tất") {
     <div>
-        <MDButton variant="contained" color="primary" onClick={handleOpen}>
+      <MDButton variant="contained" color="primary" onClick={handleOpen}>
         {currentStep}
-        </MDButton>
-             </div>
+      </MDButton>
+    </div>;
   }
-  return <div><MDButton variant="contained" color="info">Hoàn thành</MDButton></div>
+  return (
+    <div>
+      <MDButton variant="contained" color="info">
+        Hoàn thành
+      </MDButton>
+    </div>
+  );
 }
 
 async function getDocuments() {
@@ -102,6 +141,11 @@ async function getDocuments() {
   });
   return docData;
 }
+const getDayOfTime = (d1, d2) => {
+  let ms1 = d1.getTime();
+  let ms2 = d2.getTime();
+  return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
+};
 
 function CreateDocument() {
   const [isCreated, setIsCreated] = useState([]);
@@ -114,7 +158,8 @@ function CreateDocument() {
           return {
             ...current,
             NgayDeNghiDauNoi:
-            current.NgayDeNghiDauNoi === undefined || current.NgayDeNghiDauNoi === null
+              current.NgayDeNghiDauNoi === undefined ||
+              current.NgayDeNghiDauNoi === null
                 ? ""
                 : convertDateTimeToString(
                     new Date(
@@ -123,7 +168,8 @@ function CreateDocument() {
                     )
                   ),
             NgayChuyenHoSoThoaThuan:
-            current.NgayChuyenHoSoThoaThuan === undefined || current.NgayChuyenHoSoThoaThuan === null
+              current.NgayChuyenHoSoThoaThuan === undefined ||
+              current.NgayChuyenHoSoThoaThuan === null
                 ? ""
                 : convertDateTimeToString(
                     new Date(
@@ -132,7 +178,8 @@ function CreateDocument() {
                     )
                   ),
             NgayChuyenVePKT:
-            current.NgayChuyenVePKT === undefined || current.NgayChuyenVePKT === null
+              current.NgayChuyenVePKT === undefined ||
+              current.NgayChuyenVePKT === null
                 ? ""
                 : convertDateTimeToString(
                     new Date(
@@ -141,7 +188,8 @@ function CreateDocument() {
                     )
                   ),
             NgayNopHoSoDayDu:
-            current.NgayNopHoSoDayDu === undefined || current.NgayNopHoSoDayDu === null
+              current.NgayNopHoSoDayDu === undefined ||
+              current.NgayNopHoSoDayDu === null
                 ? ""
                 : convertDateTimeToString(
                     new Date(
@@ -149,17 +197,26 @@ function CreateDocument() {
                         current.NgayNopHoSoDayDu.nanoseconds / 1000000
                     )
                   ),
-            BuocTiep:
-            <GetNextStep documentId={current.MaHoSo} documentData = {current} currentStep={
-              current.NgayNopHoSoDayDu == null?"Xác nhận đủ HS":
-              (current.NgayNopHoSoDayDu != null &&
-              (current.NgayChuyenVePKT === null || current.NgayChuyenVePKT === undefined) )
-              ? "Chuyển về công ty"
-              : (current.NgayNopHoSoDayDu != null &&
-                current.NgayChuyenVePKT != null && (current.NgayChuyenHoSoThoaThuan === undefined || current.NgayChuyenHoSoThoaThuan === null))
-              ? "Thoả thuận Đấu nối"
-              : "Hoàn tất"}  ></GetNextStep>
-            
+            BuocTiep: (
+              <GetNextStep
+                documentId={current.MaHoSo}
+                documentData={current}
+                currentStep={
+                  current.NgayNopHoSoDayDu == null
+                    ? "Xác nhận đủ HS"
+                    : current.NgayNopHoSoDayDu != null &&
+                      (current.NgayChuyenVePKT === null ||
+                        current.NgayChuyenVePKT === undefined)
+                    ? "Chuyển về công ty"
+                    : current.NgayNopHoSoDayDu != null &&
+                      current.NgayChuyenVePKT != null &&
+                      (current.NgayChuyenHoSoThoaThuan === undefined ||
+                        current.NgayChuyenHoSoThoaThuan === null)
+                    ? "Thoả thuận Đấu nối"
+                    : "Hoàn tất"
+                }
+              ></GetNextStep>
+            ),
           };
         })
       );
@@ -178,27 +235,36 @@ function CreateDocument() {
   const HandleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
+    let t = e.target;
+    console.log(t)
+    //addData();
   };
-  // if (isCreated) {
-  //   message = toast.success("Tạo hồ sơ thành công", {
-  //     autoClose: 3000,
-  //     closeOnClick: true,
-  //     position: "bottom-right",
-  //   });
-  // }
-  // if (isCreated == false) {
-  //   message = toast.error("Không tạo được hồ sơ", {
-  //     autoClose: 3000,
-  //     closeOnClick: true,
-  //     position: "bottom-right",
-  //   });
-  // }
-
+const message=null;
+  if (isCreated === true) {
+    message = toast.success("Tạo hồ sơ thành công", {
+      autoClose: 3000,
+      closeOnClick: true,
+      position: "bottom-right",
+    });
+  }
+  if (isCreated === false) {
+    message = toast.error("Không tạo được hồ sơ", {
+      autoClose: 3000,
+      closeOnClick: true,
+      position: "bottom-right",
+    });
+  }
+  
   return (
     <MDBox mt={3}>
       <MDBox mb={3}>
         <MDBox component="form" role="form" onSubmit={HandleSubmit}>
-          <MDBox mb={2} display="grid" gridTemplateColumns="10% 10% 60% 10% 10%" gridgap="10px">
+          <MDBox
+            mb={2}
+            display="grid"
+            gridTemplateColumns="10% 10% 60% 10% 10%"
+            gridgap="10px"
+          >
             <MDInput
               type="text"
               label="Mã hồ sơ"
@@ -238,8 +304,13 @@ function CreateDocument() {
               InputLabelProps={{ shrink: true }}
             />
           </MDBox>
-         
-          <MDBox mb={2} mb={2} display="grid" gridTemplateColumns="1fr 1fr" gridgap="10px">
+
+          <MDBox
+            mb={2}
+            display="grid"
+            gridTemplateColumns="1fr 1fr"
+            gridgap="10px"
+          >
             <MDInput
               type="text"
               label="Đường dẫn tệp"
@@ -252,21 +323,17 @@ function CreateDocument() {
               Tạo hồ sơ
             </MDButton>
           </MDBox>
-          
         </MDBox>
       </MDBox>
       <MDBox mb={3}>
         <DataTable
           canSearch={true}
-          sx
           table={{
             columns: COLUMNS,
             rows: data,
-          }
-        }
+          }}
         />
       </MDBox>
-
       <ToastContainer position="bottom-right" limit={1} />
     </MDBox>
   );
