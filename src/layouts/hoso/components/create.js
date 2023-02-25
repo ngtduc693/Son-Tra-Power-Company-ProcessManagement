@@ -59,7 +59,7 @@ function getCellStyle(rowData, rowIndex, colIndex) {
     }
   }
 }
-function GetNextStep({ currentStep, documentId, documentData }) {
+function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -80,6 +80,7 @@ function GetNextStep({ currentStep, documentId, documentData }) {
           currentStep={currentStep}
           documentId={documentId}
           documentData={documentData}
+          refresh = {refreshData}
         />
       </div>
     );
@@ -96,6 +97,7 @@ function GetNextStep({ currentStep, documentId, documentData }) {
           currentStep={currentStep}
           documentId={documentId}
           documentData={documentData}
+          refresh = {refreshData}
         />
       </div>
     );
@@ -112,6 +114,7 @@ function GetNextStep({ currentStep, documentId, documentData }) {
           currentStep={currentStep}
           documentId={documentId}
           documentData={documentData}
+          refresh = {refreshData}
         />
       </div>
     );
@@ -150,82 +153,81 @@ const getDayOfTime = (d1, d2) => {
 function CreateDocument() {
   const [isCreated, setIsCreated] = useState([]);
   const [data, setData] = useState([]);
+  async function fetchData() {
+    const docData = await getDocuments();
+    setData(
+      docData.map((current) => {
+        return {
+          ...current,
+          NgayDeNghiDauNoi:
+            current.NgayDeNghiDauNoi === undefined ||
+            current.NgayDeNghiDauNoi === null
+              ? ""
+              : convertDateTimeToString(
+                  new Date(
+                    current.NgayDeNghiDauNoi.seconds * 1000 +
+                      current.NgayDeNghiDauNoi.nanoseconds / 1000000
+                  )
+                ),
+          NgayChuyenHoSoThoaThuan:
+            current.NgayChuyenHoSoThoaThuan === undefined ||
+            current.NgayChuyenHoSoThoaThuan === null
+              ? ""
+              : convertDateTimeToString(
+                  new Date(
+                    current.NgayChuyenHoSoThoaThuan.seconds * 1000 +
+                      current.NgayChuyenHoSoThoaThuan.nanoseconds / 1000000
+                  )
+                ),
+          NgayChuyenVePKT:
+            current.NgayChuyenVePKT === undefined ||
+            current.NgayChuyenVePKT === null
+              ? ""
+              : convertDateTimeToString(
+                  new Date(
+                    current.NgayChuyenVePKT.seconds * 1000 +
+                      current.NgayChuyenVePKT.nanoseconds / 1000000
+                  )
+                ),
+          NgayNopHoSoDayDu:
+            current.NgayNopHoSoDayDu === undefined ||
+            current.NgayNopHoSoDayDu === null
+              ? ""
+              : convertDateTimeToString(
+                  new Date(
+                    current.NgayNopHoSoDayDu.seconds * 1000 +
+                      current.NgayNopHoSoDayDu.nanoseconds / 1000000
+                  )
+                ),
+          BuocTiep: (
+            <GetNextStep
+              refreshData = {fetchData}
+              documentId={current.MaHoSo}
+              documentData={current}
+              currentStep={
+                current.NgayNopHoSoDayDu == null
+                  ? "Xác nhận đủ HS"
+                  : current.NgayNopHoSoDayDu != null &&
+                    (current.NgayChuyenVePKT === null ||
+                      current.NgayChuyenVePKT === undefined)
+                  ? "Chuyển về công ty"
+                  : current.NgayNopHoSoDayDu != null &&
+                    current.NgayChuyenVePKT != null &&
+                    (current.NgayChuyenHoSoThoaThuan === undefined ||
+                      current.NgayChuyenHoSoThoaThuan === null)
+                  ? "Thoả thuận Đấu nối"
+                  : "Hoàn tất"
+              }
+            ></GetNextStep>
+          ),
+        };
+      })
+    );
+  }
   useEffect(() => {
-    async function fetchData() {
-      const docData = await getDocuments();
-      setData(
-        docData.map((current) => {
-          return {
-            ...current,
-            NgayDeNghiDauNoi:
-              current.NgayDeNghiDauNoi === undefined ||
-              current.NgayDeNghiDauNoi === null
-                ? ""
-                : convertDateTimeToString(
-                    new Date(
-                      current.NgayDeNghiDauNoi.seconds * 1000 +
-                        current.NgayDeNghiDauNoi.nanoseconds / 1000000
-                    )
-                  ),
-            NgayChuyenHoSoThoaThuan:
-              current.NgayChuyenHoSoThoaThuan === undefined ||
-              current.NgayChuyenHoSoThoaThuan === null
-                ? ""
-                : convertDateTimeToString(
-                    new Date(
-                      current.NgayChuyenHoSoThoaThuan.seconds * 1000 +
-                        current.NgayChuyenHoSoThoaThuan.nanoseconds / 1000000
-                    )
-                  ),
-            NgayChuyenVePKT:
-              current.NgayChuyenVePKT === undefined ||
-              current.NgayChuyenVePKT === null
-                ? ""
-                : convertDateTimeToString(
-                    new Date(
-                      current.NgayChuyenVePKT.seconds * 1000 +
-                        current.NgayChuyenVePKT.nanoseconds / 1000000
-                    )
-                  ),
-            NgayNopHoSoDayDu:
-              current.NgayNopHoSoDayDu === undefined ||
-              current.NgayNopHoSoDayDu === null
-                ? ""
-                : convertDateTimeToString(
-                    new Date(
-                      current.NgayNopHoSoDayDu.seconds * 1000 +
-                        current.NgayNopHoSoDayDu.nanoseconds / 1000000
-                    )
-                  ),
-            BuocTiep: (
-              <GetNextStep
-                documentId={current.MaHoSo}
-                documentData={current}
-                currentStep={
-                  current.NgayNopHoSoDayDu == null
-                    ? "Xác nhận đủ HS"
-                    : current.NgayNopHoSoDayDu != null &&
-                      (current.NgayChuyenVePKT === null ||
-                        current.NgayChuyenVePKT === undefined)
-                    ? "Chuyển về công ty"
-                    : current.NgayNopHoSoDayDu != null &&
-                      current.NgayChuyenVePKT != null &&
-                      (current.NgayChuyenHoSoThoaThuan === undefined ||
-                        current.NgayChuyenHoSoThoaThuan === null)
-                    ? "Thoả thuận Đấu nối"
-                    : "Hoàn tất"
-                }
-              ></GetNextStep>
-            ),
-          };
-        })
-      );
-    }
+   
     fetchData();
   }, []);
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const columns = useMemo(() => COLUMNS, []);
   const tableInstance = useTable({ columns, data });
@@ -246,11 +248,13 @@ function CreateDocument() {
         TepDinhKemLucTaoHoSo: e.target[10].value 
       });
       if (result.includes('thành công')){
+        fetchData()
         toast.success(result, {
           autoClose: 3000,
           closeOnClick: true,
           position: "bottom-right",
         }
+
       )}
       else{
         toast.error(result, {

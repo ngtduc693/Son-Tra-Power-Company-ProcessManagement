@@ -45,6 +45,7 @@ const DateTimePickerModalStep1 = ({
   currentStep,
   documentId,
   documentData,
+  refresh
 }) => {
 
   
@@ -55,6 +56,7 @@ const DateTimePickerModalStep1 = ({
       ...documentData,
       NgayNopHoSoDayDu: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
     });
+    await refresh()
     handleClose();
   };
 

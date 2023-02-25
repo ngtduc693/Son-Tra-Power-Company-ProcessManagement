@@ -45,6 +45,7 @@ const DateTimePickerModalStep3 = ({
   currentStep,
   documentId,
   documentData,
+  refresh
 }) => {
 
   
@@ -55,6 +56,7 @@ const DateTimePickerModalStep3 = ({
       ...documentData,
       NgayChuyenHoSoThoaThuan: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
     });
+    await refresh()
     handleClose();
   };
 
