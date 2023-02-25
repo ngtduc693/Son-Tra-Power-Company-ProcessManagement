@@ -236,7 +236,7 @@ function CreateDocument() {
     //Prevent page reload
     e.preventDefault();
     
-    const result = await addData('Documents',
+    const result = await addData('Documents',e.target[0].value,
       {
         MaHoSo: e.target[0].value,
         NgayDeNghiDauNoi:  new Date(Date.parse(e.target[2].value)),
@@ -245,22 +245,21 @@ function CreateDocument() {
         NgayNopHoSoDayDu: e.target[8].value === "" ? null : new Date(Date.parse(e.target[8].value)),
         TepDinhKemLucTaoHoSo: e.target[10].value 
       });
+      if (result.includes('thành công')){
+        toast.success(result, {
+          autoClose: 3000,
+          closeOnClick: true,
+          position: "bottom-right",
+        }
+      )}
+      else{
+        toast.error(result, {
+          autoClose: 3000,
+          closeOnClick: true,
+          position: "bottom-right",
+        })
+      }
   };
-const message=null;
-  if (isCreated === true) {
-    message = toast.success("Tạo hồ sơ thành công", {
-      autoClose: 3000,
-      closeOnClick: true,
-      position: "bottom-right",
-    });
-  }
-  if (isCreated === false) {
-    message = toast.error("Không tạo được hồ sơ", {
-      autoClose: 3000,
-      closeOnClick: true,
-      position: "bottom-right",
-    });
-  }
   
   return (
     <MDBox mt={3}>

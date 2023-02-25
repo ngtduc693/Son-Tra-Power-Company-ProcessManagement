@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { collection, addDoc, query, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, getDocs, setDoc, doc } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -17,13 +17,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-export const addData = async (documentName, data) => {
+export const addData = async (documentName, documentId, data) => {
   try {
-    const docRef = await addDoc(collection(db, documentName), data);
+    const docRef = await setDoc(doc(db, documentName,documentId), data)
 
-    console.log(`Tài liệu đã được thêm thành công với ID: ${docRef.id}`);
+    return `Thêm thành công với ID: ${documentId}`;
   } catch (error) {
-    console.error('Lỗi khi thêm tài liệu: ', error);
+    return 'Lỗi ' + error;
   }
 };
 
