@@ -81,7 +81,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   if (currentStep === "Xác nhận đủ HS") {
     return (
       <div>
-        <MDButton variant="contained" color="success" onClick={handleOpen}>
+        <MDButton fullWidth variant="contained" color="warning" onClick={handleOpen}>
           {currentStep}
         </MDButton>
         <FullRecordsDateStep
@@ -98,7 +98,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   if (currentStep === "Chuyển về công ty") {
     return (
       <div>
-        <MDButton variant="contained" color="success" onClick={handleOpen}>
+        <MDButton fullWidth variant="contained" color="warning" onClick={handleOpen}>
           {currentStep}
         </MDButton>
         <TransferDocumentsToCompany
@@ -115,7 +115,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   if (currentStep === "Thoả thuận Đấu nối") {
     return (
       <div>
-        <MDButton variant="contained" color="success" onClick={handleOpen}>
+        <MDButton fullWidth variant="contained" color="warning" onClick={handleOpen}>
           {currentStep}
         </MDButton>
         <ElectricalConnectionAgreementStep
@@ -132,7 +132,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   if (currentStep === "Nhận thỏa thuận đấu nối") {
     return(
     <div>
-      <MDButton variant="contained" color="success" onClick={handleOpen}>
+      <MDButton fullWidth variant="contained" color="warning" onClick={handleOpen}>
         {currentStep}
       </MDButton>
       <ConfirmReceiptOfConnectionAgreementStep
@@ -148,7 +148,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   if (currentStep === "Đề nghị nghiệm thu") {
     return(
     <div>
-      <MDButton variant="contained" color="success" onClick={handleOpen}>
+      <MDButton fullWidth variant="contained" color="warning" onClick={handleOpen}>
         {currentStep}
       </MDButton>
       <ProposalForAcceptanceStep
@@ -164,7 +164,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   if (currentStep === "Hoàn thành nghiệm thu") {
     return(
     <div>
-      <MDButton variant="contained" color="success" onClick={handleOpen}>
+      <MDButton fullWidth variant="contained" color="warning" onClick={handleOpen}>
         {currentStep}
       </MDButton>
       <CompleteTheAcceptanceTestStep
@@ -179,7 +179,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   }
   return (
     <div>
-      <MDButton variant="contained" color="info">
+      <MDButton variant="contained" color="success">
         {currentStep}
       </MDButton>
     </div>
