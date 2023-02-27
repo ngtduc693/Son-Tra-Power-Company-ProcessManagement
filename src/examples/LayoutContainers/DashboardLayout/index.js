@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 
-// react-router-dom components
+
 import { useLocation } from "react-router-dom";
 
-// prop-types is a library for typechecking of props.
+
 import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
+
 import MDBox from "components/MDBox";
 
-// Material Dashboard 2 React context
+
 import { useMaterialUIController, setLayout } from "context";
 import bgImage from "../../../assets/images/bg-profile.jpeg";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
@@ -51,7 +51,7 @@ function DashboardLayout({ children }) {
   );
 }
 
-// Typechecking props for the DashboardLayout
+
 DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };

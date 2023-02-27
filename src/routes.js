@@ -8,6 +8,7 @@ import Icon from "@mui/material/Icon";
 import { ChuyenHoSoSangDienLuc } from "layouts/hoso";
 import { Thoa } from "layouts/hoso";
 import { ThoaThuanDauNoi } from "layouts/hoso";
+import HoSoReport from "layouts/hoso/indexReport";
 
 const routes = [
   {
@@ -21,28 +22,12 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Chuyển hồ sơ",
-    key: "chuyenhoso",
+    name: "Báo cáo hồ sơ",
+    key: "baocaohoso",
     icon: <Icon fontSize="small">content_paste_go</Icon>,
-    route: "/chuyenhoso",
-    component: <ChuyenHoSoSangDienLuc />
-  },
-  {
-    type: "collapse",
-    name: "Thoả thuận đấu nối",
-    key: "thoathuandaunoi",
-    icon: <Icon fontSize="small">gavel</Icon>,
-    route: "/thoathuandaunoi",
-    component: <ThoaThuanDauNoi />,
-  },
-  {
-    type: "collapse",
-    name: "Kiểm tra hồ sơ",
-    key: "kiemtrahoso",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/kiemtrahoso",
-    component: <Billing />,
-  },
+    route: "/baocaohoso",
+    component: <HoSoReport />
+  }
 ];
 
 export default routes;
