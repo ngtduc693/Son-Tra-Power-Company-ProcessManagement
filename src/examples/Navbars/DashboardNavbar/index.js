@@ -179,8 +179,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
             }}
           >
             {pages.map((page) => (
-               (<MenuItem key={page.name} component={Link} to={`/${page.path}`}>
-                {page.name}
+               (<MenuItem key={page.name}>
+                <Link to={page.path}  key={page.path}>{page.name}</Link>
               </MenuItem>)
             ))}
           </Menu>
@@ -202,7 +202,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
             textDecoration: "none",
           }}
         >
-          LOGO
+          Process Management
         </Typography>
         <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
           {pages.map((page) => (
