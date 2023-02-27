@@ -31,6 +31,7 @@ import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 
+import {getDayOfTime, convertTimestampToDate} from "../../../components/utils.js"
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -195,12 +196,6 @@ async function getDocuments() {
   });
   return docData;
 }
-const getDayOfTime = (d1, d2) => {
-  let ms1 = d1.getTime();
-  let ms2 = d2.getTime();
-  return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
-};
-
 
 function CreateDocument() {
   const [isCreated, setIsCreated] = useState([]);
@@ -262,41 +257,29 @@ function CreateDocument() {
             current.NgayDeNghiDauNoi === null
               ? ""
               : convertDateTimeToString(
-                  new Date(
-                    current.NgayDeNghiDauNoi.seconds * 1000 +
-                      current.NgayDeNghiDauNoi.nanoseconds / 1000000
-                  )
-                ),
+                convertTimestampToDate(current.NgayDeNghiDauNoi)
+              ),
           NgayChuyenHoSoThoaThuan:
             current.NgayChuyenHoSoThoaThuan === undefined ||
             current.NgayChuyenHoSoThoaThuan === null
               ? ""
               : convertDateTimeToString(
-                  new Date(
-                    current.NgayChuyenHoSoThoaThuan.seconds * 1000 +
-                      current.NgayChuyenHoSoThoaThuan.nanoseconds / 1000000
-                  )
-                ),
+                convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)
+              ),
           NgayChuyenVePKT:
             current.NgayChuyenVePKT === undefined ||
             current.NgayChuyenVePKT === null
               ? ""
               : convertDateTimeToString(
-                  new Date(
-                    current.NgayChuyenVePKT.seconds * 1000 +
-                      current.NgayChuyenVePKT.nanoseconds / 1000000
-                  )
-                ),
+                convertTimestampToDate(current.NgayChuyenVePKT)
+              ),
           NgayNopHoSoDayDu:
             current.NgayNopHoSoDayDu === undefined ||
             current.NgayNopHoSoDayDu === null
               ? ""
               : convertDateTimeToString(
-                  new Date(
-                    current.NgayNopHoSoDayDu.seconds * 1000 +
-                      current.NgayNopHoSoDayDu.nanoseconds / 1000000
-                  )
-                ),
+                convertTimestampToDate(current.NgayNopHoSoDayDu)
+              ),
           // NgayNhanHoSoThoaThuan:
           //   current.NgayNhanHoSoThoaThuan === undefined ||
           //   current.NgayNhanHoSoThoaThuan === null
