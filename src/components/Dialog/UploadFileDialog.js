@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MDInput from "../MDInput";
 import MDBox from "components/MDBox";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -21,19 +21,22 @@ const UploadFileDialog = () => {
       (snapshot) => {
         const percent = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        ); // update progress
-        setFileUrl(percent);
+        ); 
+        setFileUrl(percent + "%");
       },
       (err) => console.log(err),
       () => {
-        // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
           setFileUrl(url);
         });
       }
     );
   };
+  useEffect(() => {
+    let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
+    if (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)
+    getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value =  fileUrl
+  }, [fileUrl]);
   return (
     <MDBox display="grid" gridTemplateColumns="1fr 1fr" gridgap="5px">
       <MDInput
@@ -43,7 +46,7 @@ const UploadFileDialog = () => {
         disabled
         variant="outlined"
         InputLabelProps={{ shrink: true }}
-        value={fileUrl}
+        className = "uploadFileDialog"
       />
       <input
         id="fileInput"

@@ -22,6 +22,8 @@ import {
 
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../../layouts/authentication/components/firebase.js";
+import UploadFileDialog from "components/Dialog/UploadFileDialog";
+import MDBox from "components/MDBox";
 const updateData = async (docId, newData) => {
   try {
     const docRef = doc(db, "Documents", docId);
@@ -51,10 +53,13 @@ const DateTimePickerModalStep2 = ({
   
 
   const handleSave = async () => {
-    console.log(document.getElementById('date-picker-dialog').value);
+    let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
+    
     await updateData(documentId, {
       ...documentData,
       NgayChuyenVePKT: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
+      TepDinhKemChuyenVePKT: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
+      getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value:""
     });
     await refresh()
     handleClose();
@@ -64,8 +69,8 @@ const DateTimePickerModalStep2 = ({
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Chuyển về công ty</DialogTitle>
       <DialogContent>
-        <FormControl fullWidth margin="dense">
-          <MDInput
+        <FormControl fullWidth margin="dense" >
+          <MDInput 
             id="date-picker-dialog"
             type="date"
             label="Ngày chuyển"
@@ -75,6 +80,8 @@ const DateTimePickerModalStep2 = ({
             InputLabelProps={{ shrink: true }}
           />
         </FormControl>
+        <MDBox mt={2}><UploadFileDialog/></MDBox>
+        
       </DialogContent>
       <DialogActions>
         <MDButton onClick={handleClose} color="primary">

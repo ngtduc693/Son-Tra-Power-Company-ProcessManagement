@@ -158,6 +158,7 @@ const getDayOfTime = (d1, d2) => {
   return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
 };
 
+
 function CreateDocument() {
   const [isCreated, setIsCreated] = useState([]);
   const [data, setData] = useState([]);
@@ -168,13 +169,26 @@ function CreateDocument() {
         return {
           ...current,
           TepDinhKemLucTaoHoSo:
-            current.TepDinhKemLucTaoHoSo != undefined &&
-            current.TepDinhKemLucTaoHoSo != null &&
-            current.TepDinhKemLucTaoHoSo != "" ? (
+          
+            (current.TepDinhKemLucTaoHoSo)? (
               <div>
                 <a href={current.TepDinhKemLucTaoHoSo} target="_blank">
-                  Xem tệp
+                  Xem tệp lúc tạo hồ sơ
                 </a>
+                {(current.TepDinhKemChuyenVePKT)?(
+                <div><br />
+                  <a href={current.TepDinhKemChuyenVePKT} target="_blank">
+                  Xem tệp bước về PKT
+                </a>
+                </div>
+                ):""}
+                {(current.TepDinhKemHoSoThoaThuan)?(
+                <div><br />
+                  <a href={current.TepDinhKemHoSoThoaThuan} target="_blank">
+                  Xem tệp bước thỏa thuận
+                </a>
+                </div>
+                ):""}
               </div>
             ) : (
               ""
