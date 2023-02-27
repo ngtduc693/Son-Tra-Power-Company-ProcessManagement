@@ -63,7 +63,7 @@ const UploadFileDialog = () => {
       <MDBox
         style={{ display: "flex", alignItems: "center", marginLeft: "5px" }}
       >
-        <label htmlFor="fileInput" style={{ fontSize: "1.05rem" }}>
+        <label htmlFor="fileInput" style={{ fontSize: "0.9rem" }}>
           Chọn tệp...
         </label>
       </MDBox>

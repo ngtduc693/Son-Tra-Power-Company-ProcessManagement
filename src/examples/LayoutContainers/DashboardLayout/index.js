@@ -25,9 +25,10 @@ function DashboardLayout({ children }) {
 
   return (
     <div
-      // style={{
-      //   backgroundImage: `url(${bgImage})`,
-      // }}
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover'
+      }}
     >
       <MDBox
         sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
