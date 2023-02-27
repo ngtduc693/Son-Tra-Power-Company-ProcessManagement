@@ -105,7 +105,13 @@ function ReportDocument() {
             current.NgayChuyenHoSoThoaThuan === undefined ||
             current.NgayChuyenHoSoThoaThuan === null
               ? ""
-              : convertDateTimeToString(convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)),
+              : getDayOfTime(convertTimestampToDate(current.NgayChuyenVePKT),convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)) > 1 ? (
+                <MDButton color="warning">
+                  {convertDateTimeToString(
+                    convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)
+                  )}
+                </MDButton>
+              ) :  convertDateTimeToString(convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)),
           NgayChuyenVePKT:
             current.NgayChuyenVePKT === undefined ||
             current.NgayChuyenVePKT === null
