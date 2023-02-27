@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 import DateTimePickerModalStep1 from "components/DateTimePickerModal/DateTimePickerModalStep1.js";
 import DateTimePickerModalStep2 from "components/DateTimePickerModal/DateTimePickerModalStep2.js";
 import DateTimePickerModalStep3 from "components/DateTimePickerModal/DateTimePickerModalStep3.js";
-
+import DateTimePickerModalStep4 from "components/DateTimePickerModal/DateTimePickerModalStep4.js";
 import UploadFileDialog from "components/Dialog/UploadFileDialog.js";
 
 // @mui material components
@@ -45,6 +45,8 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import { useTable } from "react-table";
 import { COLUMNS } from "./columns.js";
 import { Opacity } from "@mui/icons-material";
+import DateTimePickerModalStep5 from "components/DateTimePickerModal/DateTimePickerModalStep5.js";
+import DateTimePickerModalStep6 from "components/DateTimePickerModal/DateTimePickerModalStep6.js";
 function convertDateTimeToString(today) {
   const day = today.getDate();
   const month = today.getMonth() + 1;
@@ -127,17 +129,58 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
       </div>
     );
   }
-  if (currentStep === "Hoàn tất") {
+  if (currentStep === "Nhận thỏa thuận đấu nối") {
+    return(
     <div>
-      <MDButton variant="contained" color="primary" onClick={handleOpen}>
+      <MDButton variant="contained" color="success" onClick={handleOpen}>
         {currentStep}
       </MDButton>
-    </div>;
+      <DateTimePickerModalStep4
+          open={open}
+          handleClose={handleClose}
+          currentStep={currentStep}
+          documentId={documentId}
+          documentData={documentData}
+          refresh={refreshData}
+        />
+    </div>);
+  }
+  if (currentStep === "Đề nghị nghiệm thu") {
+    return(
+    <div>
+      <MDButton variant="contained" color="success" onClick={handleOpen}>
+        {currentStep}
+      </MDButton>
+      <DateTimePickerModalStep5
+          open={open}
+          handleClose={handleClose}
+          currentStep={currentStep}
+          documentId={documentId}
+          documentData={documentData}
+          refresh={refreshData}
+        />
+    </div>);
+  }
+  if (currentStep === "Hoàn thành nghiệm thu") {
+    return(
+    <div>
+      <MDButton variant="contained" color="success" onClick={handleOpen}>
+        {currentStep}
+      </MDButton>
+      <DateTimePickerModalStep6
+          open={open}
+          handleClose={handleClose}
+          currentStep={currentStep}
+          documentId={documentId}
+          documentData={documentData}
+          refresh={refreshData}
+        />
+    </div>);
   }
   return (
     <div>
       <MDButton variant="contained" color="info">
-        Hoàn thành
+        {currentStep}
       </MDButton>
     </div>
   );
@@ -176,16 +219,37 @@ function CreateDocument() {
                   Xem tệp lúc tạo hồ sơ
                 </a>
                 {(current.TepDinhKemChuyenVePKT)?(
-                <div><br />
+                <div>
                   <a href={current.TepDinhKemChuyenVePKT} target="_blank">
                   Xem tệp bước về PKT
                 </a>
                 </div>
                 ):""}
                 {(current.TepDinhKemHoSoThoaThuan)?(
-                <div><br />
+                <div>
                   <a href={current.TepDinhKemHoSoThoaThuan} target="_blank">
                   Xem tệp bước thỏa thuận
+                </a>
+                </div>
+                ):""}
+                {(current.TepDinhKemNgayNhanThoaThuan)?(
+                <div>
+                  <a href={current.TepDinhKemNgayNhanThoaThuan} target="_blank">
+                  Xem tệp bước nhận thỏa thuận
+                </a>
+                </div>
+                ):""}
+                {(current.TepDinhKemNgayDeNghiNghiemThu)?(
+                <div>
+                  <a href={current.TepDinhKemNgayDeNghiNghiemThu} target="_blank">
+                  Xem tệp bước đề nghị nghiệm thu
+                </a>
+                </div>
+                ):""}
+                {(current.TepDinhKemNgayHoanThanhNghiemThu)?(
+                <div>
+                  <a href={current.TepDinhKemNgayHoanThanhNghiemThu} target="_blank">
+                  Xem tệp bước hoàn thành nghiệm thu
                 </a>
                 </div>
                 ):""}
@@ -233,24 +297,34 @@ function CreateDocument() {
                       current.NgayNopHoSoDayDu.nanoseconds / 1000000
                   )
                 ),
+          // NgayNhanHoSoThoaThuan:
+          //   current.NgayNhanHoSoThoaThuan === undefined ||
+          //   current.NgayNhanHoSoThoaThuan === null
+          //     ? ""
+          //     : convertDateTimeToString(
+          //         new Date(
+          //           current.NgayNhanHoSoThoaThuan.seconds * 1000 +
+          //             current.NgayNhanHoSoThoaThuan.nanoseconds / 1000000
+          //         )
+          //       ),
           BuocTiep: (
             <GetNextStep
               refreshData={fetchData}
               documentId={current.MaHoSo}
               documentData={current}
               currentStep={
-                current.NgayNopHoSoDayDu == null
-                  ? "Xác nhận đủ HS"
-                  : current.NgayNopHoSoDayDu != null &&
+                current.NgayNopHoSoDayDu == null? "Xác nhận đủ HS"
+                  : (current.NgayNopHoSoDayDu != null &&
                     (current.NgayChuyenVePKT === null ||
-                      current.NgayChuyenVePKT === undefined)
-                  ? "Chuyển về công ty"
-                  : current.NgayNopHoSoDayDu != null &&
+                      current.NgayChuyenVePKT === undefined))? "Chuyển về công ty"
+                  : (current.NgayNopHoSoDayDu != null &&
                     current.NgayChuyenVePKT != null &&
                     (current.NgayChuyenHoSoThoaThuan === undefined ||
-                      current.NgayChuyenHoSoThoaThuan === null)
-                  ? "Thoả thuận Đấu nối"
-                  : "Hoàn tất"
+                      current.NgayChuyenHoSoThoaThuan === null))? "Thoả thuận Đấu nối":
+                  (current.NgayNhanHoSoThoaThuan === null || current.NgayNhanHoSoThoaThuan === undefined)? "Nhận thỏa thuận đấu nối":
+                  (current.NgayDeNghiNghiemThu === null || current.NgayDeNghiNghiemThu === undefined)? "Đề nghị nghiệm thu":
+                  (current.NgayHoanThanhNghiemThu === null || current.NgayHoanThanhNghiemThu === undefined)? "Hoàn thành nghiệm thu":
+                  "Hoàn tất"
               }
             ></GetNextStep>
           ),

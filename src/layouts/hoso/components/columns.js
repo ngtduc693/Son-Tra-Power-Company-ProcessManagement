@@ -27,6 +27,10 @@ export const COLUMNS = [
         Header: 'Ngày thoả thuận',
         accessor: 'NgayChuyenHoSoThoaThuan',
     },
+    // {
+    //     Header: 'Ngày nhận thoả thuận',
+    //     accessor: 'NgayNhanHoSoThoaThuan',
+    // },
     {
         Header: 'Tệp đính kèm',
         accessor: 'TepDinhKemLucTaoHoSo',
