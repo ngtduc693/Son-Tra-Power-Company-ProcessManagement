@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import MDInput from "../MDInput";
 import MDButton from "../MDButton";
+import MDBox from "components/MDBox";
 import {
   collection,
   doc,
@@ -23,7 +24,6 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../../layouts/authentication/components/firebase.js";
 import UploadFileDialog from "components/Dialog/UploadFileDialog";
-import MDBox from "components/MDBox";
 const updateData = async (docId, newData) => {
   try {
     const docRef = doc(db, "Documents", docId);
@@ -41,7 +41,7 @@ const updateData = async (docId, newData) => {
     console.log(error);
   }
 };
-const DateTimePickerModalStep2 = ({
+const ElectricalConnectionAgreementStep = ({
   open,
   handleClose,
   currentStep,
@@ -54,11 +54,11 @@ const DateTimePickerModalStep2 = ({
 
   const handleSave = async () => {
     let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
-    
+    console.log(document.getElementById('date-picker-dialog').value);
     await updateData(documentId, {
       ...documentData,
-      NgayChuyenVePKT: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
-      TepDinhKemChuyenVePKT: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
+      NgayChuyenHoSoThoaThuan: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
+      TepDinhKemHoSoThoaThuan: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
       getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value:""
     });
     await refresh()
@@ -67,13 +67,13 @@ const DateTimePickerModalStep2 = ({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Chuyển về công ty</DialogTitle>
+      <DialogTitle>Thoả thuận đấu nối</DialogTitle>
       <DialogContent>
-        <FormControl fullWidth margin="dense" >
-          <MDInput 
+        <FormControl fullWidth margin="dense">
+          <MDInput mb={2}
             id="date-picker-dialog"
             type="date"
-            label="Ngày chuyển"
+            label="Ngày thoả thuận"
             required
             variant="outlined"
             fullWidth
@@ -81,7 +81,6 @@ const DateTimePickerModalStep2 = ({
           />
         </FormControl>
         <MDBox mt={2}><UploadFileDialog/></MDBox>
-        
       </DialogContent>
       <DialogActions>
         <MDButton onClick={handleClose} color="primary">
@@ -95,4 +94,4 @@ const DateTimePickerModalStep2 = ({
   );
 };
 
-export default DateTimePickerModalStep2;
+export default ElectricalConnectionAgreementStep;

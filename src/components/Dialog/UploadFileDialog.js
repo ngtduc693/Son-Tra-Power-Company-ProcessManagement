@@ -33,7 +33,9 @@ const UploadFileDialog = () => {
     );
   };
   useEffect(() => {
+
     let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
+    debugger;
     if (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)
     getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value =  fileUrl
   }, [fileUrl]);

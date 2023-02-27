@@ -41,7 +41,7 @@ const updateData = async (docId, newData) => {
     console.log(error);
   }
 };
-const DateTimePickerModalStep4 = ({
+const ConfirmReceiptOfConnectionAgreementStep = ({
   open,
   handleClose,
   currentStep,
@@ -94,4 +94,4 @@ const DateTimePickerModalStep4 = ({
   );
 };
 
-export default DateTimePickerModalStep4;
+export default ConfirmReceiptOfConnectionAgreementStep;

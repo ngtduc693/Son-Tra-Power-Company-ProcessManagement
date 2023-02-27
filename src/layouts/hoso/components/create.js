@@ -20,10 +20,10 @@ import DataTable from "examples/Tables/DataTable";
 // react-router-dom components
 import { Link } from "react-router-dom";
 
-import DateTimePickerModalStep1 from "components/DateTimePickerModal/DateTimePickerModalStep1.js";
-import DateTimePickerModalStep2 from "components/DateTimePickerModal/DateTimePickerModalStep2.js";
-import DateTimePickerModalStep3 from "components/DateTimePickerModal/DateTimePickerModalStep3.js";
-import DateTimePickerModalStep4 from "components/DateTimePickerModal/DateTimePickerModalStep4.js";
+import FullRecordsDateStep from "components/DateTimePickerModal/FullRecordsDateStep.js";
+import TransferDocumentsToCompany from "components/DateTimePickerModal/TransferDocumentsToCompany.js";
+import ElectricalConnectionAgreementStep from "components/DateTimePickerModal/ElectricalConnectionAgreementStep.js";
+import ConfirmReceiptOfConnectionAgreementStep from "components/DateTimePickerModal/ConfirmReceiptOfConnectionAgreementStep.js";
 import UploadFileDialog from "components/Dialog/UploadFileDialog.js";
 
 // @mui material components
@@ -45,8 +45,8 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import { useTable } from "react-table";
 import { COLUMNS } from "./columns.js";
 import { Opacity } from "@mui/icons-material";
-import DateTimePickerModalStep5 from "components/DateTimePickerModal/DateTimePickerModalStep5.js";
-import DateTimePickerModalStep6 from "components/DateTimePickerModal/DateTimePickerModalStep6.js";
+import ProposalForAcceptanceStep from "components/DateTimePickerModal/ProposalForAcceptanceStep.js";
+import CompleteTheAcceptanceTestStep from "components/DateTimePickerModal/CompleteTheAcceptanceTestStep.js";
 function convertDateTimeToString(today) {
   const day = today.getDate();
   const month = today.getMonth() + 1;
@@ -84,7 +84,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
         <MDButton variant="contained" color="success" onClick={handleOpen}>
           {currentStep}
         </MDButton>
-        <DateTimePickerModalStep1
+        <FullRecordsDateStep
           open={open}
           handleClose={handleClose}
           currentStep={currentStep}
@@ -101,7 +101,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
         <MDButton variant="contained" color="success" onClick={handleOpen}>
           {currentStep}
         </MDButton>
-        <DateTimePickerModalStep2
+        <TransferDocumentsToCompany
           open={open}
           handleClose={handleClose}
           currentStep={currentStep}
@@ -118,7 +118,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
         <MDButton variant="contained" color="success" onClick={handleOpen}>
           {currentStep}
         </MDButton>
-        <DateTimePickerModalStep3
+        <ElectricalConnectionAgreementStep
           open={open}
           handleClose={handleClose}
           currentStep={currentStep}
@@ -135,7 +135,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
       <MDButton variant="contained" color="success" onClick={handleOpen}>
         {currentStep}
       </MDButton>
-      <DateTimePickerModalStep4
+      <ConfirmReceiptOfConnectionAgreementStep
           open={open}
           handleClose={handleClose}
           currentStep={currentStep}
@@ -151,7 +151,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
       <MDButton variant="contained" color="success" onClick={handleOpen}>
         {currentStep}
       </MDButton>
-      <DateTimePickerModalStep5
+      <ProposalForAcceptanceStep
           open={open}
           handleClose={handleClose}
           currentStep={currentStep}
@@ -167,7 +167,7 @@ function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
       <MDButton variant="contained" color="success" onClick={handleOpen}>
         {currentStep}
       </MDButton>
-      <DateTimePickerModalStep6
+      <CompleteTheAcceptanceTestStep
           open={open}
           handleClose={handleClose}
           currentStep={currentStep}

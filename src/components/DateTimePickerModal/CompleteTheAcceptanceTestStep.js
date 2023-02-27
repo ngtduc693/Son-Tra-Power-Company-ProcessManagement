@@ -41,7 +41,7 @@ const updateData = async (docId, newData) => {
     console.log(error);
   }
 };
-const DateTimePickerModalStep5 = ({
+const CompleteTheAcceptanceTestStep = ({
   open,
   handleClose,
   currentStep,
@@ -55,10 +55,11 @@ const DateTimePickerModalStep5 = ({
   const handleSave = async () => {
     let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
     console.log(document.getElementById('date-picker-dialog').value);
+    
     await updateData(documentId, {
       ...documentData,
-      NgayDeNghiNghiemThu: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
-      TepDinhKemNgayDeNghiNghiemThu: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
+      NgayHoanThanhNghiemThu: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
+      TepDinhKemNgayHoanThanhNghiemThu: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
       getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value:""
     });
     await refresh()
@@ -67,13 +68,13 @@ const DateTimePickerModalStep5 = ({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Đề nghị nghiệm thu</DialogTitle>
+      <DialogTitle>Hoàn thành nghiệm thu</DialogTitle>
       <DialogContent>
         <FormControl fullWidth margin="dense">
           <MDInput mb={2}
             id="date-picker-dialog"
             type="date"
-            label="Ngày đề nghị nghiệm thu"
+            label="Ngày hoàn thành nghiệm thu"
             required
             variant="outlined"
             fullWidth
@@ -94,4 +95,4 @@ const DateTimePickerModalStep5 = ({
   );
 };
 
-export default DateTimePickerModalStep5;
+export default CompleteTheAcceptanceTestStep;

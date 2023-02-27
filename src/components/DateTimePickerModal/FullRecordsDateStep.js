@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import MDInput from "../MDInput";
 import MDButton from "../MDButton";
-import MDBox from "components/MDBox";
 import {
   collection,
   doc,
@@ -20,10 +19,11 @@ import {
   query,
   where,
 } from "firebase/firestore";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import MDBox from "components/MDBox";
 import { db } from "../../layouts/authentication/components/firebase.js";
-import UploadFileDialog from "components/Dialog/UploadFileDialog";
 const updateData = async (docId, newData) => {
   try {
     const docRef = doc(db, "Documents", docId);
@@ -32,55 +32,58 @@ const updateData = async (docId, newData) => {
 
     setDoc(docRef, data)
       .then((docRef) => {
-        console.log("Entire Document has been updated successfully");
+        toast.success("Lưu dữ liệu thành công", {
+          autoClose: 3000,
+          closeOnClick: true,
+          position: "bottom-right",
+        });
       })
       .catch((error) => {
-        console.log(error);
+        toast.error("Lỗi " + error, {
+          autoClose: 3000,
+          closeOnClick: true,
+          position: "bottom-right",
+        });
       });
   } catch (error) {
     console.log(error);
   }
 };
-const DateTimePickerModalStep6 = ({
+const FullRecordsDateStep = ({
   open,
   handleClose,
   currentStep,
   documentId,
   documentData,
-  refresh
+  refresh,
 }) => {
-
-  
-
   const handleSave = async () => {
-    let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
-    console.log(document.getElementById('date-picker-dialog').value);
+    console.log(document.getElementById("date-picker-dialog").value);
     await updateData(documentId, {
       ...documentData,
-      NgayHoanThanhNghiemThu: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
-      TepDinhKemNgayHoanThanhNghiemThu: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
-      getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value:""
+      NgayNopHoSoDayDu: new Date(
+        Date.parse(document.getElementById("date-picker-dialog").value)
+      ),
     });
-    await refresh()
+    await refresh();
     handleClose();
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Hoàn thành nghiệm thu</DialogTitle>
+      <DialogTitle>Xác nhận ngày đầy đủ hồ sơ</DialogTitle>
       <DialogContent>
         <FormControl fullWidth margin="dense">
-          <MDInput mb={2}
+          <MDInput
             id="date-picker-dialog"
             type="date"
-            label="Ngày hoàn thành nghiệm thu"
+            label="Ngày đầy đủ hồ sơ"
             required
             variant="outlined"
             fullWidth
             InputLabelProps={{ shrink: true }}
           />
         </FormControl>
-        <MDBox mt={2}><UploadFileDialog/></MDBox>
       </DialogContent>
       <DialogActions>
         <MDButton onClick={handleClose} color="primary">
@@ -94,4 +97,4 @@ const DateTimePickerModalStep6 = ({
   );
 };
 
-export default DateTimePickerModalStep6;
+export default FullRecordsDateStep;
