@@ -27,6 +27,14 @@ const routes = [
     icon: <Icon fontSize="small">content_paste_go</Icon>,
     route: "/baocaohoso",
     component: <HoSoReport />
+  },
+  {
+    type: "collapse",
+    name: "Đăng nhập",
+    key: "dangnhap",
+    icon: <Icon fontSize="small">content_paste_go</Icon>,
+    route: "/dangnhap",
+    component: <SignIn />
   }
 ];
 
