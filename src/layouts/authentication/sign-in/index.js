@@ -22,13 +22,12 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-profile.jpeg";
 
-function Basic() {
+function Basic({setIsLoggedIn}) {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [branch, setBranch] = useState(null);
-  const [isSuccess, setIsSuccess] = useState(null);
   const [isLoginClicked, setIsLoginClicked] = useState(null);
 
   const HandleSubmit = async (e) => {
@@ -48,19 +47,18 @@ function Basic() {
       setUser(data[0].user);
       setRole(data[0].role);
       setBranch(data[0].branch);
-      setIsSuccess(true);
+      setIsLoggedIn(true)
     } else {
       setUser(null);
       setRole(null);
       setBranch(null);
-      setIsSuccess(false);
     }
 
     setIsLoginClicked(Math.random());
   };
   useEffect(() => {
     if (isLoginClicked) {
-      if (isSuccess && user && role) {
+      if (user && role) {
         toast.success("Đăng nhập thành công", {
           autoClose: 3000,
           closeOnClick: true,

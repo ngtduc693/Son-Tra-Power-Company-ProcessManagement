@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -34,11 +34,13 @@ import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
+  const history = useNavigate();
   const [controller, dispatch] = useMaterialUIController();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    // Check the login status here
-    // Set isLoggedIn to true if the user is logged in
+    if (isLoggedIn){
+      history(-1)
+    }
   }, [isLoggedIn]);
   const {
     miniSidenav,
@@ -52,7 +54,6 @@ export default function App() {
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
