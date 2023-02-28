@@ -44,10 +44,11 @@ const UploadFileDialog = () => {
         type="text"
         label="Đường dẫn tệp"
         fullWidth
-        disabled
         variant="outlined"
-        InputLabelProps={{ shrink: true }}
+        InputLabelProps={{ backgroundColor: 'transparent', shrink: true }}
+        InputProps={{readOnly: true}}
         className = "uploadFileDialog"
+
       />
       <input
         id="fileInput"
