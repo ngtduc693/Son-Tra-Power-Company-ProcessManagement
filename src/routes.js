@@ -1,13 +1,8 @@
 import HoSo from "layouts/hoso";
-import Tables from "layouts/tables";
-import Billing from "layouts/billing";
 import SignIn from "layouts/authentication/sign-in";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
-import { ChuyenHoSoSangDienLuc } from "layouts/hoso";
-import { Thoa } from "layouts/hoso";
-import { ThoaThuanDauNoi } from "layouts/hoso";
 import HoSoReport from "layouts/hoso/indexReport";
 
 const routes = [
