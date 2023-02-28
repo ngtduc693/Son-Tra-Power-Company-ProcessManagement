@@ -27,6 +27,7 @@ import routes from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import SignIn from "layouts/authentication/sign-in";
 
 // Images
 import brandWhite from "assets/images/logo-ct.png";
@@ -34,6 +35,11 @@ import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    // Check the login status here
+    // Set isLoggedIn to true if the user is logged in
+  }, [isLoggedIn]);
   const {
     miniSidenav,
     direction,
@@ -80,16 +86,25 @@ export default function App() {
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+      debugger;
+      if (route.isPrivate){
+        if (isLoggedIn){
+          if (route.collapse) {
+            return getRoutes(route.collapse);
+          }
+    
+          if (route.route) {
+            return <Route exact path={route.route} element={route.component} key={route.key} />;
+          }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
-
-      return null;
-    });
+          return null;
+        }
+          return <Route path="/dangnhap" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
+        }
+        return <Route exact path={route.route} element={route.component} key={route.key} />; 
+        
+        
+      });
 
   const configsButton = (
     <MDBox
@@ -136,7 +151,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/quanlyhoso" />} />
+        <Route path="*" element={<Navigate to="/dangnhap" />} />
       </Routes>
     </ThemeProvider>
   )
