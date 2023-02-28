@@ -16,10 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 
 import { useLocation, Link } from "react-router-dom";
 
-
 import PropTypes from "prop-types";
-
-
 
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
@@ -29,7 +26,6 @@ import HoSoReport from "layouts/hoso/indexReport";
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
 
-
 import {
   navbar,
   navbarContainer,
@@ -38,14 +34,16 @@ import {
   navbarMobileMenu,
 } from "examples/Navbars/DashboardNavbar/styles";
 
-
 import {
   useMaterialUIController,
   setTransparentNavbar,
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
-const pages = [{name: "Quản lý hồ sơ", path: '/quanlyhoso'}, {name: "Báo cáo", path: '/baocaohoso'}];
+const pages = [
+  { name: "Quản lý hồ sơ", path: "/quanlyhoso" },
+  { name: "Báo cáo", path: "/baocaohoso" },
+];
 const settings = ["Đăng xuất"];
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -59,14 +57,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
   } = controller;
 
   useEffect(() => {
-    
     if (fixedNavbar) {
       setNavbarType("sticky");
     } else {
       setNavbarType("static");
     }
 
-    
     function handleTransparentNavbar() {
       setTransparentNavbar(
         dispatch,
@@ -80,10 +76,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
     */
     window.addEventListener("scroll", handleTransparentNavbar);
 
-    
     handleTransparentNavbar();
 
-    
     return () => window.removeEventListener("scroll", handleTransparentNavbar);
   }, [dispatch, fixedNavbar]);
 
@@ -105,7 +99,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
     setAnchorElUser(null);
   };
 
-  
   const iconsStyle = ({
     palette: { dark, white, text },
     functions: { rgba },
@@ -179,9 +172,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
             }}
           >
             {pages.map((page) => (
-               (<MenuItem key={page.name}>
-                <Link to={page.path}  key={page.path}>{page.name}</Link>
-              </MenuItem>)
+              <MenuItem key={page.name}>
+                <Link to={page.path} key={page.path} style={{ width: "100%" }}>
+                  {page.name}
+                </Link>
+              </MenuItem>
             ))}
           </Menu>
         </Box>
@@ -206,12 +201,14 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </Typography>
         <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
           {pages.map((page) => (
-            <Button
-              key={page.name}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              <Link to={page.path}  key={page.path}>{page.name}</Link>
-            </Button>
+            <Link to={page.path} key={page.path}>
+              <Button
+                key={page.name}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {page.name}
+              </Button>
+            </Link>
           ))}
         </Box>
 
@@ -249,13 +246,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
   );
 }
 
-
 DashboardNavbar.defaultProps = {
   absolute: false,
   light: false,
   isMini: false,
 };
-
 
 DashboardNavbar.propTypes = {
   absolute: PropTypes.bool,
