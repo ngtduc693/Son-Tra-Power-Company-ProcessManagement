@@ -1,22 +1,8 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 import { useState, useEffect } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -41,13 +27,21 @@ import routes from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import SignIn from "layouts/authentication/sign-in";
 
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
+  const history = useNavigate();
   const [controller, dispatch] = useMaterialUIController();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    if (isLoggedIn){
+      history(-1)
+    }
+  }, [isLoggedIn]);
   const {
     miniSidenav,
     direction,
@@ -60,7 +54,6 @@ export default function App() {
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
-
   
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -94,16 +87,25 @@ export default function App() {
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+      debugger;
+      if (route.isPrivate){
+        if (isLoggedIn){
+          if (route.collapse) {
+            return getRoutes(route.collapse);
+          }
+    
+          if (route.route) {
+            return <Route exact path={route.route} element={route.component} key={route.key} />;
+          }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
-
-      return null;
-    });
+          return null;
+        }
+          return <Route path="/dangnhap" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
+        }
+        return <Route exact path={route.route} element={route.component} key={route.key} />; 
+        
+        
+      });
 
   const configsButton = (
     <MDBox
@@ -150,7 +152,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/quanlyhoso" />} />
+        <Route path="*" element={<Navigate to="/dangnhap" />} />
       </Routes>
     </ThemeProvider>
   )

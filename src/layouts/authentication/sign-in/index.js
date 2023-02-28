@@ -1,11 +1,16 @@
-
-
 import { useState, useEffect } from "react";
-import { collection, doc, setDoc , getDocs, query, where} from "firebase/firestore"; 
-import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import {db} from '../components/firebase.js';
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { db } from "../components/firebase.js";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
@@ -17,54 +22,57 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-profile.jpeg";
 
-function Basic() {
+function Basic({setIsLoggedIn}) {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-  const [user, setUser] = useState([]);
-  const [role, setRole] = useState([]);
-  const [isSuccess, setIsSuccess] = useState(null);
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [branch, setBranch] = useState(null);
+  const [isLoginClicked, setIsLoginClicked] = useState(null);
 
-const HandleSubmit = async(e) => {
-  
-  e.preventDefault();
-  const email = e.target[0].value ;
-  const password = e.target[2].value ;
-  const q = query(collection(db,'Auth'),where('Email', '==', email));
-  const querySnapshot = await getDocs(q);
-  let docids = [];
-  let data = [];
-  
-  querySnapshot.forEach((doc) => {
-    docids = [...docids, doc.id];
-    data = [...data,doc.data()]
-  });
-  if (docids.length > 0){
-    setUser(data[0].Email)
-    setRole(data[0].Role)
-    setIsSuccess(true);
-  }
-  else{
-    setUser(null);
-    setRole(null);
-    setIsSuccess(false);
-  }
-  
-};
-let message = null;
-if (isSuccess){
-  message = toast.success("Đăng nhập thành công",{
-    autoClose: 3000, 
-    closeOnClick: true, 
-    position: "bottom-right" 
-  });
-}
-if (isSuccess == false){
-  message = toast.error("Đăng nhập thất bại",{
-    autoClose: 3000, 
-    closeOnClick: true, 
-    position: "bottom-right" 
-  });
-}
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    const user = e.target[0].value;
+    const password = e.target[2].value;
+    const q = query(collection(db, "Auth"), where("user", "==", user), where("password", "==", password));
+    const querySnapshot = await getDocs(q);
+    let docids = [];
+    let data = [];
+
+    querySnapshot.forEach((doc) => {
+      docids = [...docids, doc.id];
+      data = [...data, doc.data()];
+    });
+    if (docids.length > 0) {
+      setUser(data[0].user);
+      setRole(data[0].role);
+      setBranch(data[0].branch);
+      setIsLoggedIn(true)
+    } else {
+      setUser(null);
+      setRole(null);
+      setBranch(null);
+    }
+
+    setIsLoginClicked(Math.random());
+  };
+  useEffect(() => {
+    if (isLoginClicked) {
+      if (user && role) {
+        toast.success("Đăng nhập thành công", {
+          autoClose: 3000,
+          closeOnClick: true,
+          position: "bottom-right",
+        });
+      } else {
+        toast.error("Đăng nhập thất bại", {
+          autoClose: 3000,
+          closeOnClick: true,
+          position: "bottom-right",
+        });
+      }
+    }
+  }, [isLoginClicked]);
 
   return (
     <BasicLayout image={bgImage}>
@@ -88,11 +96,10 @@ if (isSuccess == false){
             spacing={3}
             justifyContent="center"
             sx={{ mt: 1, mb: 1 }}
-          >
-          </Grid>
+          ></Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form" onSubmit = {HandleSubmit}>
+          <MDBox component="form" role="form" onSubmit={HandleSubmit}>
             <MDBox mb={2}>
               <MDInput type="text" label="Tên đăng nhập" fullWidth />
             </MDBox>
@@ -116,15 +123,11 @@ if (isSuccess == false){
                 Đăng nhập
               </MDButton>
             </MDBox>
-           
           </MDBox>
         </MDBox>
-        
       </Card>
-      <ToastContainer position="bottom-right" limit={1}/>
-      {message}
+      <ToastContainer position="bottom-right" limit={1} />
     </BasicLayout>
-     
   );
 }
 

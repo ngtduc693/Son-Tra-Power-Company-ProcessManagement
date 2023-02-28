@@ -54,22 +54,6 @@ function convertDateTimeToString(today) {
   const year = today.getFullYear();
   return `${day}/${month}/${year}`;
 }
-function getCellStyle(rowData, rowIndex, colIndex) {
-  console.log(rowData);
-  if (rowData[colIndex] != "") {
-    if (colIndex === 4) {
-      console.log(rowData[colIndex]);
-      console.log(rowData[1]);
-      console.log(getDayOfTime(rowData[colIndex], rowData[1]));
-      if (getDayOfTime(rowData[colIndex], rowData[1]) > 1) {
-        return {
-          backgroundColor: "yellow",
-          color: "white",
-        };
-      }
-    }
-  }
-}
 function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
