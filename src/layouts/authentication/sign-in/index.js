@@ -35,8 +35,7 @@ function Basic() {
     e.preventDefault();
     const user = e.target[0].value;
     const password = e.target[2].value;
-    const q = query(collection(db, "Auth"), where("user", "==", user));
-    debugger;
+    const q = query(collection(db, "Auth"), where("user", "==", user), where("password", "==", password));
     const querySnapshot = await getDocs(q);
     let docids = [];
     let data = [];
