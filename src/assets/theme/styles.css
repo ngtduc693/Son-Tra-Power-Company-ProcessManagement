@@ -1,0 +1,21 @@
+.ag-theme-material {
+    --ag-card-radius: 10px;
+    --ag-card-shadow: 0 10px 40px rgb(59, 116, 190);
+    --ag-popup-shadow: var(--ag-card-shadow);
+    --ag-tab-min-width: 350px;
+  }
+  
+  .ag-theme-material .ag-menu {
+    background-color: rgb(244, 220, 250); /* light purple */
+  }
+  
+  .ag-theme-material .ag-tabs-header {
+    background-color: rgb(59, 116, 190); 
+  }
+  
+  .ag-theme-material .ag-tabs-header .ag-icon {
+    color: white;
+  }
+  .highlight-cell {
+    background-color: yellow;
+  }
