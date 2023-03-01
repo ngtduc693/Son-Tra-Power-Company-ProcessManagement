@@ -16,4 +16,6 @@
   .ag-theme-material .ag-tabs-header .ag-icon {
     color: white;
   }
-  
+  .highlight-cell {
+    background-color: yellow;
+  }

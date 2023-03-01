@@ -12,7 +12,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-material.css";
 import { COLUMNS } from "./columnsReport.js";
 import { db, addData } from "../../authentication/components/firebase.js";
-import { convertTimestampToDate } from "../../../components//utils.js";
+import { convertTimestampToDate, convertDateTimeToString } from "../../../components//utils.js";
 import { collection, getDocs, query } from "firebase/firestore";
 import MDBox from "components/MDBox";
 import "../../../assets/theme/styles.css"
@@ -20,7 +20,7 @@ import MDButton from "components/MDButton/index.js";
 const ReportDocument = () => {
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  const gridStyle = useMemo(() => ({ height: '520px', width: '100%' }), []);
+  const gridStyle = useMemo(() => ({ height: '700px', width: '100%' }), []);
   const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState(COLUMNS);
@@ -50,64 +50,16 @@ const ReportDocument = () => {
     });
     return docData;
   }
-  function convertDateTimeToString(today) {
-    const day = today.getDate();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+  
   async function fetchData() {
     const docData = await getDocuments();
     const data = await docData.map((current) => {
       return {
         ...current,
-        TepDinhKemLucTaoHoSo: "https://zing.vn",
-        NgayDeNghiDauNoi:
-          current.NgayDeNghiDauNoi === undefined ||
-          current.NgayDeNghiDauNoi === null
-            ? ""
-            : convertDateTimeToString(
-                convertTimestampToDate(current.NgayDeNghiDauNoi)
-              ),
-        NgayChuyenHoSoThoaThuan:
-          current.NgayChuyenHoSoThoaThuan === undefined ||
-          current.NgayChuyenHoSoThoaThuan === null
-            ? ""
-            : convertDateTimeToString(
-                convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)
-              ),
-        NgayChuyenVePKT:
-          current.NgayChuyenVePKT === undefined ||
-          current.NgayChuyenVePKT === null
-            ? ""
-            : convertDateTimeToString(
-                convertTimestampToDate(current.NgayChuyenVePKT)
-              ),
-        NgayNopHoSoDayDu:
-          current.NgayNopHoSoDayDu === undefined ||
-          current.NgayNopHoSoDayDu === null
-            ? ""
-            : convertDateTimeToString(
-                convertTimestampToDate(current.NgayNopHoSoDayDu)
-              ),
-        NgayDeNghiNghiemThu: current.NgayDeNghiNghiemThu === undefined ||
-        current.NgayDeNghiNghiemThu === null
-          ? ""
-          : convertDateTimeToString(
-              convertTimestampToDate(current.NgayDeNghiNghiemThu)
-            ),
-        NgayHoanThanhNghiemThu: current.NgayHoanThanhNghiemThu === undefined ||
-        current.NgayHoanThanhNghiemThu === null
-          ? ""
-          : convertDateTimeToString(
-              convertTimestampToDate(current.NgayHoanThanhNghiemThu)
-            ),
-        NgayNhanHoSoThoaThuan: current.NgayNhanHoSoThoaThuan === undefined ||
-        current.NgayNhanHoSoThoaThuan === null
-          ? ""
-          : convertDateTimeToString(
-              convertTimestampToDate(current.NgayNhanHoSoThoaThuan)
-            ),
+        TepDinhKemLucTaoHoSo: [{name: "Xem tệp khi tạo hồ sơ" , link: current.TepDinhKemLucTaoHoSo},{name: "Xem tệp khi chuyển về phòng" , link: current.TepDinhKemChuyenVePKT},
+        {name: "Xem tệp khi tạo hồ sơ thoả thuận" , link: current.TepDinhKemHoSoThoaThuan}, {name: "Xem tệp nhận thoả thuận" , link: current.TepDinhKemNgayNhanThoaThuan}, 
+        {name: "Xem tệp khi nghiệm thu" , link: current.TepDinhKemNgayDeNghiNghiemThu}, {name: "Xem tệp khi hoàn thành nghiệm thu" , link: current.TepDinhKemNgayHoanThanhNghiemThu}],
+        
       };
     });
 

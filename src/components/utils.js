@@ -6,3 +6,10 @@ export const getDayOfTime = (d1, d2) => {
 export const convertTimestampToDate = (d) => {
   return new Date(d.seconds * 1000 + d.nanoseconds / 1000000);
 };
+
+export const convertDateTimeToString = (today) => {
+  const day = today.getDate();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  return `${day}/${month}/${year}`;
+}
