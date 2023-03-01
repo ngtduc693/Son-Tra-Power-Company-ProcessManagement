@@ -1,85 +1,60 @@
-
 import { useState, useEffect } from "react";
 
-// react-router components
-import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
-// @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
 
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React example components
-import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
 
-// Material Dashboard 2 React themes
 import theme from "assets/theme";
 
-// Material Dashboard 2 React Dark Mode themes
 import themeDark from "assets/theme-dark";
 
-// Material Dashboard 2 React routes
 import routes from "routes";
 
-// Material Dashboard 2 React contexts
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import {
+  useMaterialUIController,
+  setOpenConfigurator,
+} from "context";
 import SignIn from "layouts/authentication/sign-in";
-
-// Images
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
   const history = useNavigate();
   const [controller, dispatch] = useMaterialUIController();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    if (isLoggedIn){
-      history(-1)
+    if (isLoggedIn) {
+      if (window.history.state && window.history.state.idx > 0) {
+        history(-1);
+      } else {
+        history("/quanlyhoso", { replace: true });
+      }
     }
   }, [isLoggedIn]);
   const {
-    miniSidenav,
     direction,
     layout,
     openConfigurator,
-    sidenavColor,
-    transparentSidenav,
-    whiteSidenav,
     darkMode,
   } = controller;
-  const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
-  
-  // Open sidenav when mouse enter on mini sidenav
-  const handleOnMouseEnter = () => {
-    if (miniSidenav && !onMouseEnter) {
-      setMiniSidenav(dispatch, false);
-      setOnMouseEnter(true);
-    }
-  };
 
-  // Close sidenav when mouse leave mini sidenav
-  const handleOnMouseLeave = () => {
-    if (onMouseEnter) {
-      setMiniSidenav(dispatch, true);
-      setOnMouseEnter(false);
-    }
-  };
+  const handleConfiguratorOpen = () =>
+    setOpenConfigurator(dispatch, !openConfigurator);
 
-  // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-
-  // Setting the dir attribute for the body element
   useEffect(() => {
     document.body.setAttribute("dir", direction);
   }, [direction]);
 
-  // Setting page scroll to 0 when changing the route
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -88,24 +63,41 @@ export default function App() {
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       debugger;
-      if (route.isPrivate){
-        if (isLoggedIn){
+      if (route.isPrivate) {
+        if (isLoggedIn) {
           if (route.collapse) {
             return getRoutes(route.collapse);
           }
-    
+
           if (route.route) {
-            return <Route exact path={route.route} element={route.component} key={route.key} />;
+            return (
+              <Route
+                exact
+                path={route.route}
+                element={route.component}
+                key={route.key}
+              />
+            );
           }
 
           return null;
         }
-          return <Route path="/dangnhap" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
-        }
-        return <Route exact path={route.route} element={route.component} key={route.key} />; 
-        
-        
-      });
+        return (
+          <Route
+            path="/dangnhap"
+            element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
+          />
+        );
+      }
+      return (
+        <Route
+          exact
+          path={route.route}
+          element={route.component}
+          key={route.key}
+        />
+      );
+    });
 
   const configsButton = (
     <MDBox
@@ -155,5 +147,5 @@ export default function App() {
         <Route path="*" element={<Navigate to="/dangnhap" />} />
       </Routes>
     </ThemeProvider>
-  )
+  );
 }

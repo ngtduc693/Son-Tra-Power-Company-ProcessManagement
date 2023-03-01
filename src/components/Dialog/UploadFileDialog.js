@@ -4,9 +4,6 @@ import MDBox from "components/MDBox";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "firebase/storage";
 import {
-  db,
-  addData,
-  firebaseApp,
   firebaseStorage,
 } from "../../../src/layouts/authentication/components/firebase.js";
 const UploadFileDialog = () => {

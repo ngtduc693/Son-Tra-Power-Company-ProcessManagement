@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import {
   collection,
-  doc,
-  setDoc,
   getDocs,
   query,
   where,
 } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { db } from "../components/firebase.js";
-import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
