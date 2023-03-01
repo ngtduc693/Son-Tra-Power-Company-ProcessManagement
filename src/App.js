@@ -13,8 +13,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
 
 import MDBox from "components/MDBox";
-
-import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
 
 import theme from "assets/theme";
@@ -25,13 +23,9 @@ import routes from "routes";
 
 import {
   useMaterialUIController,
-  setMiniSidenav,
   setOpenConfigurator,
 } from "context";
 import SignIn from "layouts/authentication/sign-in";
-
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
   const history = useNavigate();
@@ -41,37 +35,18 @@ export default function App() {
     if (isLoggedIn) {
       if (window.history.state && window.history.state.idx > 0) {
         history(-1);
-    } else {
-      history('/quanlyhoso', { replace: true });
-    }
+      } else {
+        history("/quanlyhoso", { replace: true });
+      }
     }
   }, [isLoggedIn]);
   const {
-    miniSidenav,
     direction,
     layout,
     openConfigurator,
-    sidenavColor,
-    transparentSidenav,
-    whiteSidenav,
     darkMode,
   } = controller;
-  const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
-
-  const handleOnMouseEnter = () => {
-    if (miniSidenav && !onMouseEnter) {
-      setMiniSidenav(dispatch, false);
-      setOnMouseEnter(true);
-    }
-  };
-
-  const handleOnMouseLeave = () => {
-    if (onMouseEnter) {
-      setMiniSidenav(dispatch, true);
-      setOnMouseEnter(false);
-    }
-  };
 
   const handleConfiguratorOpen = () =>
     setOpenConfigurator(dispatch, !openConfigurator);
