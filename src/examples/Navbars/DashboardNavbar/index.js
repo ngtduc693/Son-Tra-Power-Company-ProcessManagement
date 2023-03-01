@@ -7,7 +7,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -17,15 +16,6 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useLocation, Link } from "react-router-dom";
 
 import PropTypes from "prop-types";
-
-import MDBox from "components/MDBox";
-import MDInput from "components/MDInput";
-import CreateDocument from "layouts/hoso/components/create";
-import HoSoReport from "layouts/hoso/indexReport";
-
-import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
-
 import {
   navbar,
   navbarContainer,
