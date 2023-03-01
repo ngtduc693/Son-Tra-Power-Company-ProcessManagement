@@ -33,11 +33,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     if (isLoggedIn) {
-      if (window.history.state && window.history.state.idx > 0) {
-        history(-1);
-      } else {
         history("/quanlyhoso", { replace: true });
-      }
     }
   }, [isLoggedIn]);
   const {
@@ -83,15 +79,9 @@ export default function App() {
         }
         return (
           <Route
-                exact
-                path={route.route}
-                element={route.component}
-                key={route.key}
-              />
-          // <Route
-          //   path="/dangnhap"
-          //   element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
-          // />
+            path="/dangnhap"
+            element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
+          />
         );
       }
       return (
