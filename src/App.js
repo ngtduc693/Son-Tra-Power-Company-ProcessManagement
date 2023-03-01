@@ -62,7 +62,6 @@ export default function App() {
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
-      debugger;
       if (route.isPrivate) {
         if (isLoggedIn) {
           if (route.collapse) {
@@ -84,9 +83,15 @@ export default function App() {
         }
         return (
           <Route
-            path="/dangnhap"
-            element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
-          />
+                exact
+                path={route.route}
+                element={route.component}
+                key={route.key}
+              />
+          // <Route
+          //   path="/dangnhap"
+          //   element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
+          // />
         );
       }
       return (

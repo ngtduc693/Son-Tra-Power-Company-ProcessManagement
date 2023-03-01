@@ -6,6 +6,7 @@ export const COLUMNS = [
     {
         Header: 'Ngày đề nghị',
         accessor: 'NgayDeNghiDauNoi',
+        filterable: true
     },
     {
         Header: 'Khách hàng',
@@ -14,18 +15,22 @@ export const COLUMNS = [
     {
         Header: 'CS đề nghị',
         accessor: 'CongSuatDeNghi',
+        filterable: true
     },
     {
         Header: 'Ngày nộp đầy đủ',
         accessor: 'NgayNopHoSoDayDu',
+        filterable: true
     },
     {
         Header: 'Ngày HS về PKT',
         accessor: 'NgayChuyenVePKT',
+        filterable: true
     },
     {
         Header: 'Ngày thoả thuận',
         accessor: 'NgayChuyenHoSoThoaThuan',
+        filterable: true
     },
     // {
     //     Header: 'Ngày nhận thoả thuận',
