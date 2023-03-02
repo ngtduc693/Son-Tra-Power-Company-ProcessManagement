@@ -58,6 +58,7 @@ const FullRecordsDateStep = ({
   documentData,
   refresh,
 }) => {
+
   const handleSave = async () => {
     console.log(document.getElementById("date-picker-dialog").value);
     await updateData(documentId, {

@@ -17,156 +17,9 @@ import { COLUMNS } from "./columns.js";
 import ProposalForAcceptanceStep from "components/DateTimePickerModal/ProposalForAcceptanceStep.js";
 import CompleteTheAcceptanceTestStep from "components/DateTimePickerModal/CompleteTheAcceptanceTestStep.js";
 import { convertTimestampToDate, convertDateTimeToString , convertDateTimeStringToVnTime } from "../../../components//utils.js";
-
-function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  if (currentStep === "Xác nhận đủ HS") {
-    return (
-      <div>
-        <MDButton
-          style={{ width: "220px" }}
-          variant="contained"
-          color="warning"
-          onClick={handleOpen}
-        >
-          {currentStep}
-        </MDButton>
-        <FullRecordsDateStep
-          open={open}
-          handleClose={handleClose}
-          currentStep={currentStep}
-          documentId={documentId}
-          documentData={documentData}
-          refresh={refreshData}
-        />
-      </div>
-    );
-  }
-  if (currentStep === "Chuyển về công ty") {
-    return (
-      <div>
-        <MDButton
-          style={{ width: "220px" }}
-          variant="contained"
-          color="warning"
-          onClick={handleOpen}
-        >
-          {currentStep}
-        </MDButton>
-        <TransferDocumentsToCompany
-          open={open}
-          handleClose={handleClose}
-          currentStep={currentStep}
-          documentId={documentId}
-          documentData={documentData}
-          refresh={refreshData}
-        />
-      </div>
-    );
-  }
-  if (currentStep === "Thoả thuận Đấu nối") {
-    return (
-      <div>
-        <MDButton
-          style={{ width: "220px" }}
-          variant="contained"
-          color="warning"
-          onClick={handleOpen}
-        >
-          {currentStep}
-        </MDButton>
-        <ElectricalConnectionAgreementStep
-          open={open}
-          handleClose={handleClose}
-          currentStep={currentStep}
-          documentId={documentId}
-          documentData={documentData}
-          refresh={refreshData}
-        />
-      </div>
-    );
-  }
-  if (currentStep === "Nhận thỏa thuận đấu nối") {
-    return (
-      <div>
-        <MDButton
-          style={{ width: "220px" }}
-          variant="contained"
-          color="warning"
-          onClick={handleOpen}
-        >
-          {currentStep}
-        </MDButton>
-        <ConfirmReceiptOfConnectionAgreementStep
-          open={open}
-          handleClose={handleClose}
-          currentStep={currentStep}
-          documentId={documentId}
-          documentData={documentData}
-          refresh={refreshData}
-        />
-      </div>
-    );
-  }
-  if (currentStep === "Đề nghị nghiệm thu") {
-    return (
-      <div>
-        <MDButton
-          style={{ width: "220px" }}
-          variant="contained"
-          color="warning"
-          onClick={handleOpen}
-        >
-          {currentStep}
-        </MDButton>
-        <ProposalForAcceptanceStep
-          open={open}
-          handleClose={handleClose}
-          currentStep={currentStep}
-          documentId={documentId}
-          documentData={documentData}
-          refresh={refreshData}
-        />
-      </div>
-    );
-  }
-  if (currentStep === "Hoàn thành nghiệm thu") {
-    return (
-      <div>
-        <MDButton
-          style={{ width: "220px" }}
-          variant="contained"
-          color="warning"
-          onClick={handleOpen}
-        >
-          {currentStep}
-        </MDButton>
-        <CompleteTheAcceptanceTestStep
-          open={open}
-          handleClose={handleClose}
-          currentStep={currentStep}
-          documentId={documentId}
-          documentData={documentData}
-          refresh={refreshData}
-        />
-      </div>
-    );
-  }
-  return (
-    <div>
-      <MDButton style={{ width: "220px" }} variant="contained" color="success">
-        {currentStep}
-      </MDButton>
-    </div>
-  );
-}
+import {useAuthUser, useSignIn} from 'react-auth-kit';
+import {rolePermissionRule} from '../../authentication/sign-in/rolePermissionRule.js'
+import GetNextStep from "./GetNextStep.js";
 
 async function getDocuments() {
   const q = query(collection(db, "Documents"));
@@ -180,9 +33,11 @@ async function getDocuments() {
 
 function CreateDocument() {
   const [data, setData] = useState([]);
+  const user = useAuthUser()();
+  
   async function fetchData() {
     const docData = await getDocuments();
-    setData(
+    await setData(
       docData.map((current) => {
         return {
           ...current,
@@ -273,6 +128,7 @@ function CreateDocument() {
 
           BuocTiep: (
             <GetNextStep
+              role = {user.role}
               refreshData={fetchData}
               documentId={current.MaHoSo}
               documentData={current}
@@ -338,7 +194,10 @@ function CreateDocument() {
   };
 
   return (
+    
     <MDBox mt={3}>
+     { (rolePermissionRule(user.role,"CreateDocument"))?
+    (
       <MDBox mb={3}>
         <MDBox component="form" role="form" onSubmit={HandleSubmit}>
           <MDBox
@@ -409,6 +268,7 @@ function CreateDocument() {
           </MDBox>
         </MDBox>
       </MDBox>
+      ):''}
       <MDBox mb={3}>
         <DataTable
           canSearch={true}
