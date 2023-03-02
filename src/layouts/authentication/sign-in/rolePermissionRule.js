@@ -32,5 +32,5 @@ export const rolePermissionRule = (role, moduleName) => {
   if (canAccess === 'all') {
     return true;
   }
-  return moduleName.filter((item) => canAccess.includes(item)).length > 0;
+  return filteredRole[0].canAccess.includes(moduleName);
 };
