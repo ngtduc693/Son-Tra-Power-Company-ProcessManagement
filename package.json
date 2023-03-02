@@ -1,16 +1,16 @@
 {
-  "name": "material-dashboard-2-react",
+  "name": "dlSonTra-ProcessManagement",
   "version": "2.1.0",
   "private": true,
-  "author": "Creative Tim",
-  "license": "See license in https://www.creative-tim.com/license",
-  "description": "React version of Material Dashboard 2 by Creative Tim",
+  "author": "Nguyen Thanh Duc",
+  "license": "",
+  "description": "The work progress management system for Son Tra Power in Da Nang City, Vietnam",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
+    "url": "https://dlsontra-processmanagement.firebaseapp.com/quanlyhoso"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
+    "url": "git+https://github.com/ngtduc693/DLSonTra-ProcessManagement.git"
   },
   "engines": {
     "node": "14 || 15 || 16",

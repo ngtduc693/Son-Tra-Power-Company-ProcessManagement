@@ -4,17 +4,17 @@ export const COLUMNS = [
         accessor: 'MaHoSo',
     },
     {
-        Header: 'Ngày đề nghị',
-        accessor: 'NgayDeNghiDauNoi',
-        filterable: true
-    },
-    {
         Header: 'Khách hàng',
         accessor: 'TenKhachHang',
     },
     {
         Header: 'CS đề nghị',
         accessor: 'CongSuatDeNghi',
+        filterable: true
+    },
+    {
+        Header: 'Ngày đề nghị',
+        accessor: 'NgayDeNghiDauNoi',
         filterable: true
     },
     {
@@ -32,10 +32,18 @@ export const COLUMNS = [
         accessor: 'NgayChuyenHoSoThoaThuan',
         filterable: true
     },
-    // {
-    //     Header: 'Ngày nhận thoả thuận',
-    //     accessor: 'NgayNhanHoSoThoaThuan',
-    // },
+    {
+        Header: 'Ngày nhận thoả thuận',
+        accessor: 'NgayNhanHoSoThoaThuan',
+    },
+    {
+        Header: 'Ngày đề nghị nghiệm thu',
+        accessor: 'NgayDeNghiNghiemThu',
+    },
+    {
+        Header: 'Ngày hoàn thành nghiệm thu',
+        accessor: 'NgayHoanThanhNghiemThu',
+    },
     {
         Header: 'Tệp đính kèm',
         accessor: 'TepDinhKemLucTaoHoSo',

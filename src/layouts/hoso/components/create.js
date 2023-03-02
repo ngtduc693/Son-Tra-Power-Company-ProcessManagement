@@ -10,20 +10,14 @@ import TransferDocumentsToCompany from "components/DateTimePickerModal/TransferD
 import ElectricalConnectionAgreementStep from "components/DateTimePickerModal/ElectricalConnectionAgreementStep.js";
 import ConfirmReceiptOfConnectionAgreementStep from "components/DateTimePickerModal/ConfirmReceiptOfConnectionAgreementStep.js";
 import UploadFileDialog from "components/Dialog/UploadFileDialog.js";
-import { convertTimestampToDate } from "../../../components/utils.js";
-
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import { COLUMNS } from "./columns.js";
 import ProposalForAcceptanceStep from "components/DateTimePickerModal/ProposalForAcceptanceStep.js";
 import CompleteTheAcceptanceTestStep from "components/DateTimePickerModal/CompleteTheAcceptanceTestStep.js";
-function convertDateTimeToString(today) {
-  const day = today.getDate();
-  const month = today.getMonth() + 1;
-  const year = today.getFullYear();
-  return `${day}/${month}/${year}`;
-}
+import { convertTimestampToDate, convertDateTimeToString , convertDateTimeStringToVnTime } from "../../../components//utils.js";
+
 function GetNextStep({ currentStep, documentId, documentData, refreshData }) {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -256,30 +250,26 @@ function CreateDocument() {
             current.NgayDeNghiDauNoi === undefined ||
             current.NgayDeNghiDauNoi === null
               ? ""
-              : convertDateTimeToString(
-                  convertTimestampToDate(current.NgayDeNghiDauNoi)
-                ),
+              : current.NgayDeNghiDauNoi
+                ,
           NgayChuyenHoSoThoaThuan:
             current.NgayChuyenHoSoThoaThuan === undefined ||
             current.NgayChuyenHoSoThoaThuan === null
               ? ""
-              : convertDateTimeToString(
-                  convertTimestampToDate(current.NgayChuyenHoSoThoaThuan)
-                ),
+              : current.NgayChuyenHoSoThoaThuan
+                ,
           NgayChuyenVePKT:
             current.NgayChuyenVePKT === undefined ||
             current.NgayChuyenVePKT === null
               ? ""
-              : convertDateTimeToString(
-                  convertTimestampToDate(current.NgayChuyenVePKT)
-                ),
+              : current.NgayChuyenVePKT
+                ,
           NgayNopHoSoDayDu:
             current.NgayNopHoSoDayDu === undefined ||
             current.NgayNopHoSoDayDu === null
               ? ""
-              : convertDateTimeToString(
-                  convertTimestampToDate(current.NgayNopHoSoDayDu)
-                ),
+              : current.NgayNopHoSoDayDu
+                ,
 
           BuocTiep: (
             <GetNextStep
@@ -325,13 +315,10 @@ function CreateDocument() {
 
     const result = await addData("Documents", e.target[0].value, {
       MaHoSo: e.target[0].value,
-      NgayDeNghiDauNoi: new Date(Date.parse(e.target[2].value)),
+      NgayDeNghiDauNoi: convertDateTimeStringToVnTime(e.target[2].value),
       TenKhachHang: e.target[4].value,
       CongSuatDeNghi: e.target[6].value,
-      NgayNopHoSoDayDu:
-        e.target[8].value === ""
-          ? null
-          : new Date(Date.parse(e.target[8].value)),
+      NgayNopHoSoDayDu: convertDateTimeStringToVnTime(e.target[8].value),
       TepDinhKemLucTaoHoSo: e.target[10].value,
     });
     if (result.includes("thành công")) {

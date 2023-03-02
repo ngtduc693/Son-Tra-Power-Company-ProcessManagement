@@ -31,7 +31,30 @@ const ReportDocument = () => {
     sortable: true,
     filter: true,
     resizable: true,
+    enableRowGroup: true,
+    enablePivot: true,
+    enableValue: true,
   }));
+
+  const autoGroupColumnDef = useMemo(() => {
+    return {
+      headerName: 'Group',
+      minWidth: 170,
+      field: 'athlete',
+      valueGetter: (params) => {
+        if (params.node.group) {
+          return params.node.key;
+        } else {
+          return params.data[params.colDef.field];
+        }
+      },
+      headerCheckboxSelection: true,
+      cellRenderer: 'agGroupCellRenderer',
+      cellRendererParams: {
+        checkbox: true,
+      },
+    };
+  }, []);
 
   const onBtnExport = useCallback(() => {
     gridRef.current.api.exportDataAsCsv();
@@ -87,6 +110,10 @@ const ReportDocument = () => {
           onCellClicked={cellClickedListener} // Optional - registering for Grid Event
           sideBar={'columns'}
           suppressExcelExport={true}
+          autoGroupColumnDef={autoGroupColumnDef}
+          rowGroupPanelShow={'always'}
+          pivotPanelShow={'always'}
+          pagination={true}
         />
       </div>
     </MDBox>

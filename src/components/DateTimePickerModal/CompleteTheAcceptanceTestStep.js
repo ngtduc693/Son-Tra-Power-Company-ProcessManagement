@@ -20,7 +20,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-
+import { convertTimestampToDate, convertDateTimeToString , convertDateTimeStringToVnTime } from "../../components/utils.js";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../../layouts/authentication/components/firebase.js";
 import UploadFileDialog from "components/Dialog/UploadFileDialog";
@@ -58,7 +58,7 @@ const CompleteTheAcceptanceTestStep = ({
     
     await updateData(documentId, {
       ...documentData,
-      NgayHoanThanhNghiemThu: new Date(Date.parse(document.getElementById('date-picker-dialog').value)),
+      NgayHoanThanhNghiemThu: convertDateTimeStringToVnTime(document.getElementById('date-picker-dialog').value),
       TepDinhKemNgayHoanThanhNghiemThu: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
       getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value:""
     });
