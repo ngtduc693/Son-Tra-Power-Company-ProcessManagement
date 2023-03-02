@@ -21,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { convertTimestampToDate, convertDateTimeToString , convertDateTimeStringToVnTime } from "../../components/utils.js";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import MDBox from "components/MDBox";
 import { db } from "../../layouts/authentication/components/firebase.js";
@@ -61,8 +62,7 @@ const FullRecordsDateStep = ({
     console.log(document.getElementById("date-picker-dialog").value);
     await updateData(documentId, {
       ...documentData,
-      NgayNopHoSoDayDu: new Date(
-        Date.parse(document.getElementById("date-picker-dialog").value)
+      NgayNopHoSoDayDu: convertDateTimeStringToVnTime(document.getElementById("date-picker-dialog").value
       ),
     });
     await refresh();

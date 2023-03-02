@@ -7,25 +7,14 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-
-import { useLocation, Link } from "react-router-dom";
-
+import SignIn from "../../../layouts/authentication/sign-in";
+import { Link, useNavigate, Route } from "react-router-dom";
 import PropTypes from "prop-types";
-
-import MDBox from "components/MDBox";
-import MDInput from "components/MDInput";
-import CreateDocument from "layouts/hoso/components/create";
-import HoSoReport from "layouts/hoso/indexReport";
-
-import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
-
 import {
   navbar,
   navbarContainer,
@@ -44,10 +33,12 @@ const pages = [
   { name: "Quản lý hồ sơ", path: "/quanlyhoso" },
   { name: "Báo cáo", path: "/baocaohoso" },
 ];
-const settings = ["Đăng xuất"];
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const history = useNavigate();
   const {
     miniSidenav,
     transparentNavbar,
@@ -83,7 +74,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -98,6 +88,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const HandleLogout = () => {
+
+    setIsLoggedIn(false);
+    history("/")
+    
+  }
 
   const iconsStyle = ({
     palette: { dark, white, text },
@@ -234,11 +231,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{setting}</Typography>
+              <MenuItem key="logout" onClick={HandleLogout}>
+                <Typography textAlign="center">Đăng xuất</Typography>
               </MenuItem>
-            ))}
+          
           </Menu>
         </Box>
       </Toolbar>
