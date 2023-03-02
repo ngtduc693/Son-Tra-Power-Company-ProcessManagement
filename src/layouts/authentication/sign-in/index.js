@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   collection,
   getDocs,
@@ -17,14 +17,17 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-profile.jpeg";
+import { useSignIn } from "react-auth-kit";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function Basic({setIsLoggedIn}) {
+function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-  const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null);
-  const [branch, setBranch] = useState(null);
-  const [isLoginClicked, setIsLoginClicked] = useState(null);
+  const signIn = useSignIn();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const params = location.search || '/quanlyhoso';
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -39,36 +42,33 @@ function Basic({setIsLoggedIn}) {
       docids = [...docids, doc.id];
       data = [...data, doc.data()];
     });
+    
     if (docids.length > 0) {
-      setUser(data[0].user);
-      setRole(data[0].role);
-      setBranch(data[0].branch);
-      setIsLoggedIn(true)
+      signIn({
+        token: Math.random(),
+        expiresIn: 1000000,
+        tokenType: 'Bearer',
+        authState: {
+          user: data[0].user,
+          role: data[0].role,
+          branch: data[0].branch,
+        },
+        refreshToken: 'refreshToken',
+      })
+      navigate(params);
+      toast.success("Đăng nhập thành công", {
+        autoClose: 3000,
+        closeOnClick: true,
+        position: "bottom-right",
+      });
     } else {
-      setUser(null);
-      setRole(null);
-      setBranch(null);
-    }
-
-    setIsLoginClicked(Math.random());
+      toast.error("Đăng nhập thất bại", {
+        autoClose: 3000,
+        closeOnClick: true,
+        position: "bottom-right",
+      });
+    };
   };
-  useEffect(() => {
-    if (isLoginClicked) {
-      if (user && role) {
-        toast.success("Đăng nhập thành công", {
-          autoClose: 3000,
-          closeOnClick: true,
-          position: "bottom-right",
-        });
-      } else {
-        toast.error("Đăng nhập thất bại", {
-          autoClose: 3000,
-          closeOnClick: true,
-          position: "bottom-right",
-        });
-      }
-    }
-  }, [isLoginClicked]);
 
   return (
     <BasicLayout image={bgImage}>

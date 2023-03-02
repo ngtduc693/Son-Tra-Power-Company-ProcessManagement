@@ -20,11 +20,19 @@ import App from "App";
 
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";
+import { AuthProvider } from "react-auth-kit";
 
 ReactDOM.render(
   <BrowserRouter>
     <MaterialUIControllerProvider>
+    <AuthProvider
+      authType={'localstorage'}
+      authName={'_auth'}
+      cookieDomain={window.location.hostname}
+      cookieSecure={window.location.protocol === 'https:'}
+    >
       <App />
+    </AuthProvider>
     </MaterialUIControllerProvider>
   </BrowserRouter>,
   document.getElementById("root")

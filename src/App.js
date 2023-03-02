@@ -1,54 +1,42 @@
-import { useState, useEffect } from "react";
-
-import {
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
-
-import MDBox from "components/MDBox";
-import Configurator from "examples/Configurator";
-
-import theme from "assets/theme";
-
-import themeDark from "assets/theme-dark";
-
-import routes from "routes";
-
-import {
-  useMaterialUIController,
-  setOpenConfigurator,
-} from "context";
-import SignIn from "layouts/authentication/sign-in";
+import {useEffect} from 'react';
+import {Routes, Route, Navigate, useLocation} from 'react-router-dom';
+import {ThemeProvider} from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Icon from '@mui/material/Icon';
+import MDBox from 'components/MDBox';
+import Configurator from 'examples/Configurator';
+import theme from 'assets/theme';
+import themeDark from 'assets/theme-dark';
+import routes from 'routes';
+import {useMaterialUIController, setOpenConfigurator} from 'context';
+import SignIn from 'layouts/authentication/sign-in';
+import {useAuthUser, useSignIn} from 'react-auth-kit';
 
 export default function App() {
-  const history = useNavigate();
+  const user = useAuthUser()();
+  const signIn = useSignIn();
   const [controller, dispatch] = useMaterialUIController();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {direction, layout, openConfigurator, darkMode} = controller;
+  const {pathname} = useLocation();
+
+  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+
   useEffect(() => {
-    if (isLoggedIn) {
-        history("/quanlyhoso", { replace: true });
+    if (user) {
+      signIn({
+        token: Math.random(),
+        expiresIn: 1000000,
+        tokenType: 'Bearer',
+        authState: {
+          ...user,
+        },
+        refreshToken: 'refreshToken',
+      });
     }
-  }, [isLoggedIn]);
-  const {
-    direction,
-    layout,
-    openConfigurator,
-    darkMode,
-  } = controller;
-  const { pathname } = useLocation();
-
-  const handleConfiguratorOpen = () =>
-    setOpenConfigurator(dispatch, !openConfigurator);
+  }, []);
 
   useEffect(() => {
-    document.body.setAttribute("dir", direction);
+    document.body.setAttribute('dir', direction);
   }, [direction]);
 
   useEffect(() => {
@@ -59,39 +47,15 @@ export default function App() {
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.isPrivate) {
-        if (isLoggedIn) {
-          if (route.collapse) {
-            return getRoutes(route.collapse);
-          }
-
+        if (user) {
           if (route.route) {
-            return (
-              <Route
-                exact
-                path={route.route}
-                element={route.component}
-                key={route.key}
-              />
-            );
+            return <Route exact path={route.route} element={route.component} key={route.key} />;
           }
-
           return null;
         }
-        return (
-          <Route
-            path="/dangnhap"
-            element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
-          />
-        );
+        return <Route path="/dangnhap" element={<SignIn />} />;
       }
-      return (
-        <Route
-          exact
-          path={route.route}
-          element={route.component}
-          key={route.key}
-        />
-      );
+      return <Route exact path={route.route} element={route.component} key={route.key} />;
     });
 
   const configsButton = (
@@ -109,7 +73,7 @@ export default function App() {
       bottom="2rem"
       zIndex={99}
       color="dark"
-      sx={{ cursor: "pointer" }}
+      sx={{cursor: 'pointer'}}
       onClick={handleConfiguratorOpen}
     >
       <Icon fontSize="small" color="inherit">
@@ -121,22 +85,22 @@ export default function App() {
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
-      {layout === "dashboard" && (
+      {layout === 'dashboard' && (
         <>
           {/* <Sidenav
-            color={sidenavColor}
-            brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="ĐL Sơn Trà"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-            width="0%"
-          /> */}
+              color={sidenavColor}
+              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+              brandName="ĐL Sơn Trà"
+              routes={routes}
+              onMouseEnter={handleOnMouseEnter}
+              onMouseLeave={handleOnMouseLeave}
+              width="0%"
+            /> */}
           <Configurator />
           {configsButton}
         </>
       )}
-      {layout === "vr" && <Configurator />}
+      {layout === 'vr' && <Configurator />}
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/dangnhap" />} />

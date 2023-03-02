@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SignIn from "../../../layouts/authentication/sign-in";
 import { Link, useNavigate, Route } from "react-router-dom";
+
 import PropTypes from "prop-types";
 import {
   navbar,
@@ -29,6 +30,8 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
+import { useSignOut } from "react-auth-kit";
+
 const pages = [
   { name: "Quản lý hồ sơ", path: "/quanlyhoso" },
   { name: "Báo cáo", path: "/baocaohoso" },
@@ -36,8 +39,8 @@ const pages = [
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
+  const signOut = useSignOut();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useNavigate();
   const {
     miniSidenav,
@@ -90,10 +93,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   };
 
   const HandleLogout = () => {
-
-    setIsLoggedIn(false);
-    history("/")
-    
+    signOut();
   }
 
   const iconsStyle = ({
