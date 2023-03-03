@@ -125,7 +125,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
           variant="h6"
           noWrap
           component="a"
-          href="/"
+          href="/quanlyhoso"
           sx={{
             mr: 2,
             display: { xs: "none", md: "flex" },

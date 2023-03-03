@@ -1,38 +1,25 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router-dom components
-import { Link } from "react-router-dom";
+import {Link} from 'react-router-dom';
 
 // @mui material components
-import Card from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
+import Card from '@mui/material/Card';
+import Checkbox from '@mui/material/Checkbox';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDInput from "components/MDInput";
-import MDButton from "components/MDButton";
+import MDBox from 'components/MDBox';
+import MDTypography from 'components/MDTypography';
+import MDInput from 'components/MDInput';
+import MDButton from 'components/MDButton';
 
 // Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
+import CoverLayout from 'layouts/authentication/components/CoverLayout';
 
 // Images
-import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+import bgImage from 'assets/images/bg-sign-up-cover.jpeg';
 
-function Cover() {
+function SignUp() {
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -48,19 +35,36 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
+            Đăng ký
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Nhập thông tin để đăng ký tài khoản
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
+          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    label="Age"
+  >
+    <MenuItem value={10}>Ten</MenuItem>
+    <MenuItem value={20}>Twenty</MenuItem>
+    <MenuItem value={30}>Thirty</MenuItem>
+  </Select>
+            <label for="donvi">Đơn vị:</label>
+            <select id="donvi" name="donvi">
+              <option value="PP">Đà Nẵng</option>
+              <option value="PP0100">ĐL Hải Châu</option>
+              <option value="PP0300">ĐL Sơn Trà</option>
+              <option value="PP0500">ĐL Thanh Khê</option>
+              <option value="PP0700">ĐL Cẩm Lệ</option>
+              <option value="PP0800">ĐL Liên Chiểu</option>
+              <option value="PP0900">ĐL Hòa Vang</option>
+            </select>
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput type="text" label="Username" variant="standard" fullWidth />
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="password" label="Password" variant="standard" fullWidth />
@@ -71,9 +75,9 @@ function Cover() {
                 variant="button"
                 fontWeight="regular"
                 color="text"
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
+                sx={{cursor: 'pointer', userSelect: 'none', ml: -1}}
               >
-                &nbsp;&nbsp;I agree the&nbsp;
+                &nbsp;&nbsp;Tôi đồng ý&nbsp;
               </MDTypography>
               <MDTypography
                 component="a"
@@ -83,26 +87,26 @@ function Cover() {
                 color="info"
                 textGradient
               >
-                Terms and Conditions
+                điều khoản
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+                Đăng ký
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
-                Already have an account?{" "}
+                Bạn đã có tài khoản?{' '}
                 <MDTypography
                   component={Link}
-                  to="/authentication/sign-in"
+                  to="/dangnhap"
                   variant="button"
                   color="info"
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign In
+                  Đăng nhập
                 </MDTypography>
               </MDTypography>
             </MDBox>
@@ -113,4 +117,4 @@ function Cover() {
   );
 }
 
-export default Cover;
+export default SignUp;

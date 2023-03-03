@@ -1,7 +1,6 @@
 import HoSo from "layouts/hoso";
 import SignIn from "layouts/authentication/sign-in";
-
-// @mui icons
+import SignUp from "layouts/authentication/sign-up";
 import Icon from "@mui/material/Icon";
 import HoSoReport from "layouts/hoso/indexReport";
 
@@ -32,6 +31,16 @@ const routes = [
     icon: <Icon fontSize="small">content_paste_go</Icon>,
     route: "/dangnhap",
     component: <SignIn />,
+    isPrivate: false
+  }
+  ,
+  {
+    type: "collapse",
+    name: "Đăng ký",
+    key: "dangky",
+    icon: <Icon fontSize="small">content_paste_go</Icon>,
+    route: "/dangky",
+    component: <SignUp />,
     isPrivate: false
   }
 ];
