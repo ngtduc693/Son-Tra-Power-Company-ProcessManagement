@@ -10,7 +10,7 @@ import themeDark from 'assets/theme-dark';
 import routes from 'routes';
 import {useMaterialUIController, setOpenConfigurator} from 'context';
 import SignIn from 'layouts/authentication/sign-in';
-import {useAuthUser, useSignIn} from 'react-auth-kit';
+import {useAuthUser, useSignIn, useSignOut} from 'react-auth-kit';
 
 export default function App() {
   const user = useAuthUser()();
@@ -18,6 +18,7 @@ export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {direction, layout, openConfigurator, darkMode} = controller;
   const {pathname} = useLocation();
+  const signOut = useSignOut()
 
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
@@ -34,6 +35,19 @@ export default function App() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    function checkUserData() {
+      const item = localStorage.getItem('_auth_state');
+      if(JSON.stringify(user) !== JSON.stringify(item)) signOut();
+    }
+  
+    window.addEventListener('storage', checkUserData)
+  
+    return () => {
+      window.removeEventListener('storage', checkUserData)
+    }
+  }, [])
 
   useEffect(() => {
     document.body.setAttribute('dir', direction);
