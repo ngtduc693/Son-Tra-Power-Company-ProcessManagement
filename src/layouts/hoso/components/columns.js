@@ -1,5 +1,9 @@
 export const COLUMNS = [
     {
+        Header: 'Đơn vị',
+        accessor: 'DonVi',
+    },
+    {
         Header: 'Mã hồ sơ',
         accessor: 'MaHoSo',
     },

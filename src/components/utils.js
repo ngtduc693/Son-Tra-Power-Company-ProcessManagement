@@ -17,6 +17,14 @@ export const convertDateTimeToString = (today) => {
   return "";
 };
 
+export const getCurrentDate = () => {
+  const date = new Date();
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 export const convertVnTimeStringToDate =(str) => {
   var parts = str.split("/");
   var day = parseInt(parts[0], 10);
