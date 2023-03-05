@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SignIn from "../../../layouts/authentication/sign-in";
 import { Link, useNavigate, Route } from "react-router-dom";
-
+import { rolePermissionRule } from "layouts/authentication/sign-in/rolePermissionRule";
 import PropTypes from "prop-types";
 import {
   navbar,
@@ -30,7 +30,7 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
-import { useSignOut } from "react-auth-kit";
+import { useSignOut, useAuthUser } from "react-auth-kit";
 
 const pages = [
   { name: "Quản lý hồ sơ", path: "/quanlyhoso" },
@@ -74,7 +74,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
     return () => window.removeEventListener("scroll", handleTransparentNavbar);
   }, [dispatch, fixedNavbar]);
-
+  const user = useAuthUser()();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenNavMenu = (event) => {
@@ -94,6 +94,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const HandleLogout = () => {
     signOut();
+  }
+
+  const HandleSignUp = () => {
+    history("/dangky")
   }
 
   const iconsStyle = ({
@@ -231,6 +235,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
+            {rolePermissionRule(user.role,"SignUp") &&
+            <MenuItem key="logout" onClick={HandleSignUp}>
+                <Typography textAlign="center">Tạo tài khoản</Typography>
+              </MenuItem>
+}
               <MenuItem key="logout" onClick={HandleLogout}>
                 <Typography textAlign="center">Đăng xuất</Typography>
               </MenuItem>
