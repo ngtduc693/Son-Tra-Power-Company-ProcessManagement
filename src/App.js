@@ -63,7 +63,6 @@ export default function App() {
     allRoutes.map((route) => {
       if (route.isPrivate) {
         if (user) {
-          debugger;
           if (route.isCheckRole) {
             if (user && !rolePermissionRule(user.role, route.key))
               return <Route path="/dangnhap" element={<SignIn />} />;
