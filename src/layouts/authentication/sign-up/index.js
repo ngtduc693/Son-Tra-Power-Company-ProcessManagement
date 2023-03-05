@@ -1,25 +1,101 @@
 import {Link} from 'react-router-dom';
-
+import {useState, useEffect, useMemo} from 'react';
 // @mui material components
 import Card from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-
+import Select from 'react-select';
 // Material Dashboard 2 React components
 import MDBox from 'components/MDBox';
 import MDTypography from 'components/MDTypography';
 import MDInput from 'components/MDInput';
 import MDButton from 'components/MDButton';
 
+import { collection, getDocs, query } from "firebase/firestore";
+import { db, addData } from "../../authentication/components/firebase.js";
 // Authentication layout components
 import CoverLayout from 'layouts/authentication/components/CoverLayout';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // Images
 import bgImage from 'assets/images/bg-sign-up-cover.jpeg';
 
 function SignUp() {
+  const donvi = [
+    {value: 'PP', label: 'Đà Nẵng'},
+    {value: 'PP0100', label: 'Hải Châu'},
+    {value: 'PP0300', label: 'Sơn Trà'},
+    {value: 'PP0500', label: 'Thanh Khê'},
+    {value: 'PP0700', label: 'Cẩm Lệ'},
+    {value: 'PP0800', label: 'Liên Chiểu'},
+    {value: 'PP0900', label: 'Hòa Vang'},
+  ];
+  const quyenhan = [
+    {value: 'qtht', label: 'Quản trị'},
+    {value: 'donvi', label: 'Đơn vị'},
+    {value: 'dienluc', label: 'Điện lực'},
+    {value: 'pkd', label: 'Phòng Kinh Doanh'},
+    {value: 'pkt', label: 'Phòng Kỹ thuật'}
+  ];
+  const [selectedDonVi, setSelectedDonVi] = useState(donvi[0]);
+  const [selectedQuyenHan, setSelectedQuyenHan] = useState(quyenhan[0]);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleDonViChange = (selectedDonVi) => {
+    setSelectedDonVi(selectedDonVi);
+  };
+  const handleQuyenHanChange = (selectedQuyenHan) => {
+    setSelectedQuyenHan(selectedQuyenHan);
+  };
+  const handleUserName = (e) => {
+    setUserName(e.target.value);
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const customTypography = {
+    fontSize: "0.82rem",
+      fontFamily: "'Roboto','Helvetica','Arial','sans-serif'",
+      lineHeight: "1.5",
+      color: "#7b809a"
+  }
+  const selectStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      height: "29.13px",
+      fontSize: "14px",
+      fontFamily: "'Roboto','Helvetica','Arial','sans-serif'",
+      backgroundColor: 'white', 
+      
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "14px",
+      fontFamily: "'Roboto','Helvetica','Arial','sans-serif'"
+    }),
+  };
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+      const result = await addData("Auth", userName, {
+      branch: selectedDonVi.value,
+      role: selectedQuyenHan.value,
+      user: userName,
+      password: password
+    });
+    if (result.includes("thành công")) {
+      toast.success(result, {
+        autoClose: 3000,
+        closeOnClick: true,
+        position: "bottom-right",
+      });
+    } else {
+      toast.error(result, {
+        autoClose: 3000,
+        closeOnClick: true,
+        position: "bottom-right",
+      });
+    }
+  }
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -42,35 +118,36 @@ function SignUp() {
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
-          <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-  >
-    <MenuItem value={10}>Ten</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
-  </Select>
-            <label for="donvi">Đơn vị:</label>
-            <select id="donvi" name="donvi">
-              <option value="PP">Đà Nẵng</option>
-              <option value="PP0100">ĐL Hải Châu</option>
-              <option value="PP0300">ĐL Sơn Trà</option>
-              <option value="PP0500">ĐL Thanh Khê</option>
-              <option value="PP0700">ĐL Cẩm Lệ</option>
-              <option value="PP0800">ĐL Liên Chiểu</option>
-              <option value="PP0900">ĐL Hòa Vang</option>
-            </select>
+          <MDBox component="form" role="form" onSubmit={HandleSubmit}>
             <MDBox mb={2}>
-              <MDInput type="text" label="Username" variant="standard" fullWidth />
+            <MDTypography style={customTypography}>Đơn vị</MDTypography>
+              <Select
+                value={selectedDonVi}
+                onChange={handleDonViChange}
+                options={donvi}
+                placeholder="-- Chọn đơn vị --"
+                styles={selectStyles}
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+            <MDTypography style={customTypography}>Quyền hạn</MDTypography>
+              <Select
+                value={selectedQuyenHan}
+                onChange={handleQuyenHanChange}
+                options={quyenhan}
+                placeholder="-- Chọn quyền --"
+                styles={selectStyles}
+              />
+            </MDBox>
+
+            <MDBox mb={2}>
+              <MDInput type="text" label="Tên truy cập" variant="standard" fullWidth required onChange={handleUserName} value={userName}/>
+            </MDBox>
+            <MDBox mb={2}>
+              <MDInput type="password" label="Mật khẩu" variant="standard" fullWidth required onChange={handlePassword} value={password}/>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
-              <Checkbox />
+              <Checkbox required/>
               <MDTypography
                 variant="button"
                 fontWeight="regular"
@@ -85,13 +162,13 @@ function SignUp() {
                 variant="button"
                 fontWeight="bold"
                 color="info"
-                textGradient
+                
               >
                 điều khoản
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton variant="gradient" color="info" fullWidth type="submit">
                 Đăng ký
               </MDButton>
             </MDBox>
@@ -104,7 +181,6 @@ function SignUp() {
                   variant="button"
                   color="info"
                   fontWeight="medium"
-                  textGradient
                 >
                   Đăng nhập
                 </MDTypography>
@@ -113,6 +189,7 @@ function SignUp() {
           </MDBox>
         </MDBox>
       </Card>
+      <ToastContainer position="bottom-right" limit={1} />
     </CoverLayout>
   );
 }

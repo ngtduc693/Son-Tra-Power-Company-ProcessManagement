@@ -25,7 +25,7 @@ export const addData = async (documentName, documentId, data) => {
   try {
     const docRef = await setDoc(doc(db, documentName,documentId), data)
 
-    return `Thêm thành công với ID: ${documentId}`;
+    return `Thêm thành công. ID: ${documentId}`;
   } catch (error) {
     return 'Lỗi ' + error;
   }
