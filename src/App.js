@@ -11,6 +11,7 @@ import routes from 'routes';
 import {useMaterialUIController, setOpenConfigurator} from 'context';
 import SignIn from 'layouts/authentication/sign-in';
 import {useAuthUser, useSignIn, useSignOut} from 'react-auth-kit';
+import {rolePermissionRule} from 'layouts/authentication/sign-in/rolePermissionRule';
 
 export default function App() {
   const user = useAuthUser()();
@@ -18,7 +19,7 @@ export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {direction, layout, openConfigurator, darkMode} = controller;
   const {pathname} = useLocation();
-  const signOut = useSignOut()
+  const signOut = useSignOut();
 
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
@@ -39,15 +40,15 @@ export default function App() {
   useEffect(() => {
     function checkUserData() {
       const item = localStorage.getItem('_auth_state');
-      if(JSON.stringify(user) !== JSON.stringify(item)) signOut();
+      if (JSON.stringify(user) !== JSON.stringify(item)) signOut();
     }
-  
-    window.addEventListener('storage', checkUserData)
-  
+
+    window.addEventListener('storage', checkUserData);
+
     return () => {
-      window.removeEventListener('storage', checkUserData)
-    }
-  }, [])
+      window.removeEventListener('storage', checkUserData);
+    };
+  }, []);
 
   useEffect(() => {
     document.body.setAttribute('dir', direction);
@@ -62,9 +63,15 @@ export default function App() {
     allRoutes.map((route) => {
       if (route.isPrivate) {
         if (user) {
+          debugger;
+          if (route.isCheckRole) {
+            if (user && !rolePermissionRule(user.role, route.key))
+              return <Route path="/dangnhap" element={<SignIn />} />;
+          }
           if (route.route) {
             return <Route exact path={route.route} element={route.component} key={route.key} />;
           }
+          
           return null;
         }
         return <Route path="/dangnhap" element={<SignIn />} />;

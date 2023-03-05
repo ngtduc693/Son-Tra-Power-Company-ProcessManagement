@@ -196,7 +196,7 @@ function CreateDocument() {
   return (
     
     <MDBox mt={3}>
-     { (rolePermissionRule(user.role,"CreateDocument"))?
+     { (rolePermissionRule(user.role,"CreateDocument")) &&
     (
       <MDBox mb={3}>
         <MDBox component="form" role="form" onSubmit={HandleSubmit}>
@@ -268,7 +268,7 @@ function CreateDocument() {
           </MDBox>
         </MDBox>
       </MDBox>
-      ):''}
+      )}
       <MDBox mb={3}>
         <DataTable
           canSearch={true}
