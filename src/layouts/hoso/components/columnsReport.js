@@ -126,10 +126,4 @@ export const COLUMNS = [
       },
     },
   },
-  // {
-  //   headerName: "Tệp đính kèm",
-  //   field: "TepDinhKemLucTaoHoSo",
-  //   filter: true,
-  //   cellRendererFramework: HyperlinkMultiValueRenderer,
-  // },
 ];

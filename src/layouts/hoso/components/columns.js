@@ -51,10 +51,11 @@ export const COLUMNS = [
     {
         Header: 'Tệp đính kèm',
         accessor: 'TepDinhKemLucTaoHoSo',
-    },{
+    },
+    {
 
-        Header: 'Bước tiếp',
+        Header: 'Hành động',
         accessor: 'BuocTiep',
     },
 ];
-export const HIDDEN_COLUMNS = ["id"]
+export const HIDE_COLUMNS = ["Tep", "Ma"]

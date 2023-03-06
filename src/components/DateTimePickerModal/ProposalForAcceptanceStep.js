@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   Button,
   Dialog,
@@ -8,31 +8,28 @@ import {
   FormControl,
   InputLabel,
   TextField,
-} from "@material-ui/core";
-import MDInput from "../MDInput";
-import MDButton from "../MDButton";
-import MDBox from "components/MDBox";
+} from '@material-ui/core';
+import MDInput from '../MDInput';
+import MDButton from '../MDButton';
+import MDBox from 'components/MDBox';
+import {collection, doc, setDoc, getDocs, query, where} from 'firebase/firestore';
 import {
-  collection,
-  doc,
-  setDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { convertTimestampToDate, convertDateTimeToString , convertDateTimeStringToVnTime } from "../../components/utils.js";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { db } from "../../layouts/authentication/components/firebase.js";
-import UploadFileDialog from "components/Dialog/UploadFileDialog";
+  convertTimestampToDate,
+  convertDateTimeToString,
+  convertDateTimeStringToVnTime,
+} from '../../components/utils.js';
+import {useCollectionData} from 'react-firebase-hooks/firestore';
+import {db} from '../../layouts/authentication/components/firebase.js';
+import UploadFileDialog from 'components/Dialog/UploadFileDialog';
 const updateData = async (docId, newData) => {
   try {
-    const docRef = doc(db, "Documents", docId);
+    const docRef = doc(db, 'Documents', docId);
 
     const data = newData;
 
     setDoc(docRef, data)
       .then((docRef) => {
-        console.log("Entire Document has been updated successfully");
+        console.log('Entire Document has been updated successfully');
       })
       .catch((error) => {
         console.log(error);
@@ -47,21 +44,26 @@ const ProposalForAcceptanceStep = ({
   currentStep,
   documentId,
   documentData,
-  refresh
+  refresh,
 }) => {
-
-  
-
   const handleSave = async () => {
-    let getAllUploadFileDialog = document.getElementsByClassName("uploadFileDialog");
+    let getAllUploadFileDialog = document.getElementsByClassName('uploadFileDialog');
     console.log(document.getElementById('date-picker-dialog').value);
     await updateData(documentId, {
       ...documentData,
-      NgayDeNghiNghiemThu: convertDateTimeStringToVnTime(document.getElementById('date-picker-dialog').value),
-      TepDinhKemNgayDeNghiNghiemThu: (getAllUploadFileDialog && getAllUploadFileDialog[getAllUploadFileDialog.length - 1] && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild && getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild)?
-      getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild.value:""
+      NgayDeNghiNghiemThu: convertDateTimeStringToVnTime(
+        document.getElementById('date-picker-dialog').value
+      ),
+      TepDinhKemNgayDeNghiNghiemThu:
+        getAllUploadFileDialog &&
+        getAllUploadFileDialog[getAllUploadFileDialog.length - 1] &&
+        getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild &&
+        getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild.firstElementChild
+          ? getAllUploadFileDialog[getAllUploadFileDialog.length - 1].lastElementChild
+              .firstElementChild.value
+          : '',
     });
-    await refresh()
+    await refresh();
     handleClose();
   };
 
@@ -70,17 +72,20 @@ const ProposalForAcceptanceStep = ({
       <DialogTitle>Đề nghị nghiệm thu</DialogTitle>
       <DialogContent>
         <FormControl fullWidth margin="dense">
-          <MDInput mb={2}
+          <MDInput
+            mb={2}
             id="date-picker-dialog"
             type="date"
             label="Ngày đề nghị nghiệm thu"
             required
             variant="outlined"
             fullWidth
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{shrink: true}}
           />
         </FormControl>
-        <MDBox mt={2}><UploadFileDialog/></MDBox>
+        <MDBox mt={2}>
+          <UploadFileDialog />
+        </MDBox>
       </DialogContent>
       <DialogActions>
         <MDButton onClick={handleClose} color="primary">

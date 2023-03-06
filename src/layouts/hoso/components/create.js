@@ -16,10 +16,11 @@ import MDButton from 'components/MDButton';
 import {COLUMNS} from './columns.js';
 import ProposalForAcceptanceStep from 'components/DateTimePickerModal/ProposalForAcceptanceStep.js';
 import CompleteTheAcceptanceTestStep from 'components/DateTimePickerModal/CompleteTheAcceptanceTestStep.js';
-import {getCurrentDate, convertDateTimeStringToVnTime} from '../../../components//utils.js';
+import {getCurrentDate, convertDateTimeStringToVnTime, getDocumentsWithCondition} from '../../../components//utils.js';
 import {useAuthUser, useSignIn} from 'react-auth-kit';
 import {rolePermissionRule} from '../../authentication/sign-in/rolePermissionRule.js';
 import GetNextStep from './GetNextStep.js';
+import UpdateDataStep from './UpdateDataStep.js';
 
 async function getDocuments() {
   const q = query(collection(db, 'Documents'));
@@ -114,35 +115,42 @@ function CreateDocument() {
               ? ''
               : current.NgayNopHoSoDayDu,
           BuocTiep: (
-            <GetNextStep
-              role={user.role}
-              refreshData={fetchData}
-              documentId={current.MaHoSo}
-              documentData={current}
-              currentStep={
-                current.NgayNopHoSoDayDu == null
-                  ? 'Xác nhận đủ HS'
-                  : current.NgayNopHoSoDayDu != null &&
-                    (current.NgayChuyenVePKT === null || current.NgayChuyenVePKT === undefined)
-                  ? 'Chuyển về công ty'
-                  : current.NgayNopHoSoDayDu != null &&
-                    current.NgayChuyenVePKT != null &&
-                    (current.NgayChuyenHoSoThoaThuan === undefined ||
-                      current.NgayChuyenHoSoThoaThuan === null)
-                  ? 'Thoả thuận Đấu nối'
-                  : current.NgayNhanHoSoThoaThuan === null ||
-                    current.NgayNhanHoSoThoaThuan === undefined
-                  ? 'Nhận thỏa thuận đấu nối'
-                  : current.NgayDeNghiNghiemThu === null ||
-                    current.NgayDeNghiNghiemThu === undefined
-                  ? 'Đề nghị nghiệm thu'
-                  : current.NgayHoanThanhNghiemThu === null ||
-                    current.NgayHoanThanhNghiemThu === undefined
-                  ? 'Hoàn thành nghiệm thu'
-                  : 'Hoàn tất'
-              }
-            ></GetNextStep>
+            <MDBox>
+              {(rolePermissionRule(user.role, 'UpdateDataStep') && <UpdateDataStep role={user.role}
+                refreshData={fetchData}
+                documentId={current.MaHoSo}
+                documentData={current}></UpdateDataStep>)}
+              <GetNextStep
+                role={user.role}
+                refreshData={fetchData}
+                documentId={current.MaHoSo}
+                documentData={current}
+                currentStep={
+                  current.NgayNopHoSoDayDu == null
+                    ? 'Xác nhận đủ HS'
+                    : current.NgayNopHoSoDayDu != null &&
+                      (current.NgayChuyenVePKT === null || current.NgayChuyenVePKT === undefined)
+                    ? 'Chuyển về công ty'
+                    : current.NgayNopHoSoDayDu != null &&
+                      current.NgayChuyenVePKT != null &&
+                      (current.NgayChuyenHoSoThoaThuan === undefined ||
+                        current.NgayChuyenHoSoThoaThuan === null)
+                    ? 'Thoả thuận Đấu nối'
+                    : current.NgayNhanHoSoThoaThuan === null ||
+                      current.NgayNhanHoSoThoaThuan === undefined
+                    ? 'Nhận thỏa thuận đấu nối'
+                    : current.NgayDeNghiNghiemThu === null ||
+                      current.NgayDeNghiNghiemThu === undefined
+                    ? 'Đề nghị nghiệm thu'
+                    : current.NgayHoanThanhNghiemThu === null ||
+                      current.NgayHoanThanhNghiemThu === undefined
+                    ? 'Hoàn thành nghiệm thu'
+                    : 'Hoàn tất'
+                }
+              ></GetNextStep>
+            </MDBox>
           ),
+
         };
       })
     );
@@ -152,7 +160,7 @@ function CreateDocument() {
   }, []);
   const columns = useMemo(() => COLUMNS, []);
 
-  const HandleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const result = await addData('Documents', e.target[0].value, {
@@ -162,7 +170,7 @@ function CreateDocument() {
       CongSuatDeNghi: e.target[6].value,
       NgayNopHoSoDayDu: convertDateTimeStringToVnTime(e.target[8].value),
       TepDinhKemLucTaoHoSo: e.target[10].value,
-      TaoBoi: JSON.stringify(user),
+      TaoBoi: (user)?user.user:"",
       NgayTao: getCurrentDate(),
       DonVi: user.branch,
     });
@@ -186,7 +194,7 @@ function CreateDocument() {
     <MDBox mt={3}>
       {rolePermissionRule(user.role, 'CreateDocument') && (
         <MDBox mb={3}>
-          <MDBox component="form" role="form" onSubmit={HandleSubmit}>
+          <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox
               mb={2}
               display="grid"
