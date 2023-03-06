@@ -30,7 +30,7 @@ const updateData = async (docId, newData) => {
 
     const data = newData;
 
-    setDoc(docRef, data)
+    await setDoc(docRef, data)
       .then((docRef) => {
         console.log("Entire Document has been updated successfully");
       })

@@ -37,6 +37,19 @@ export const getDayOfTime = (d1, d2) => {
   return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
 };
 
+export const getDocumentsWithCondition = async(documentName,condition)=> {
+  const valueCondition = condition.reduce((totalCondition,currentValue)=>{
+    return totalCondition + `, where("${condition.key}", "${condition.equal}", ${condition.value})`
+  }, ''); 
+  const q = query(collection(db, documentName), valueCondition);
+  const querySnapshot = await getDocs(q);
+  const docData = [];
+  querySnapshot.forEach((doc) => {
+    docData.push(doc.data());
+  });
+  return docData;
+}
+
 export const getDocuments = async(documentName)=> {
   const q = query(collection(db, documentName));
   const querySnapshot = await getDocs(q);
