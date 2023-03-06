@@ -236,7 +236,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
             onClose={handleCloseUserMenu}
           >
             {rolePermissionRule(user.role,"SignUp") &&
-            <MenuItem key="logout" onClick={HandleSignUp}>
+            <MenuItem key="signup" onClick={HandleSignUp}>
                 <Typography textAlign="center">Tạo tài khoản</Typography>
               </MenuItem>
 }

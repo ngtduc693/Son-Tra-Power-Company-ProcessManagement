@@ -31,7 +31,7 @@ const updateData = async (docId, newData) => {
 
     const data = newData;
 
-    setDoc(docRef, data)
+    await setDoc(docRef, data)
       .then((docRef) => {
         toast.success("Lưu dữ liệu thành công", {
           autoClose: 3000,

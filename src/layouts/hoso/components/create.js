@@ -119,7 +119,9 @@ function CreateDocument() {
               {(rolePermissionRule(user.role, 'UpdateDataStep') && <UpdateDataStep role={user.role}
                 refreshData={fetchData}
                 documentId={current.MaHoSo}
-                documentData={current}></UpdateDataStep>)}
+                documentData={current}
+                key = 'UpdateDataStep'
+                ></UpdateDataStep>)}
               <GetNextStep
                 role={user.role}
                 refreshData={fetchData}

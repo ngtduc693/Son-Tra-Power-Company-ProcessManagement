@@ -29,7 +29,7 @@ const updateData = async (docId, newData) => {
 
     const data = newData;
 
-    setDoc(docRef, data)
+    await setDoc(docRef, data)
       .then((docRef) => {
         console.log('Entire Document has been updated successfully');
       })
@@ -41,22 +41,17 @@ const updateData = async (docId, newData) => {
   }
 };
 const UpdateDataModal = ({open, handleClose, documentId, documentData, refresh}) => {
-  const handleSave = async () => {
-    await updateData(documentId, documentData);
+  const [dataNeededUpdate, setDataNeededUpdate] = useState(documentData);
+  const handleOnChange = (e) => {
+    setDataNeededUpdate({...dataNeededUpdate, [e.target.name]: e.target.value});
+  };
+  const handleSubmit = async () => {
+    await updateData(documentId, dataNeededUpdate);
     await refresh();
     handleClose();
   };
-
-const [dataNeededUpdate, setDataNeededUpdate] = useState({})
-const handleOnChange = (e) => {
-  setDataNeededUpdate({...dataNeededUpdate},e.target.values)
-}
-const handleSubmit = (e) => {
-  console.log(dataNeededUpdate)
-  debugger;
-}
   return (
-    <Dialog open={open} onClose={handleClose} styles={{width: "300px"}} fullWidth>
+    <Dialog open={open} onClose={handleClose} styles={{width: '300px'}} fullWidth>
       <DialogTitle>Sửa thông tin</DialogTitle>
       <DialogContent>
         <FormControl fullWidth margin="dense" id="formData">
@@ -74,12 +69,14 @@ const handleSubmit = (e) => {
                 <MDBox mb={2}>
                   <MDInput
                     id={item}
+                    key={item}
+                    name={item}
                     type="text"
                     label={COLUMNS.filter((x) => x.accessor === item)[0].Header}
-                    value={documentData[item]}
+                    value={dataNeededUpdate[item]}
                     variant="outlined"
                     fullWidth
-                    onChange = {()=>handleOnChange}
+                    onInput={handleOnChange}
                     InputLabelProps={{shrink: true}}
                   />
                 </MDBox>
@@ -91,7 +88,7 @@ const handleSubmit = (e) => {
         <MDButton onClick={handleClose} color="primary">
           Huỷ bỏ
         </MDButton>
-        <MDButton color="success" onClick={()=> handleSubmit()}>
+        <MDButton color="success" onClick={() => handleSubmit()}>
           Xác nhận
         </MDButton>
       </DialogActions>

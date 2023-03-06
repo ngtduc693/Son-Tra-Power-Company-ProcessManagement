@@ -40,6 +40,7 @@ function UpdateDataStep({currentStep, documentId, documentData, refreshData, rol
         Sửa
       </MDButton>
       <UpdateDataModal
+        key = "UpdateDataModal"
         open={open}
         handleClose={handleClose}
         documentId={documentId}
