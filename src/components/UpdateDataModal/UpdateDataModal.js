@@ -22,10 +22,7 @@ import {useCollectionData} from 'react-firebase-hooks/firestore';
 import {db} from '../../layouts/authentication/components/firebase.js';
 import UploadFileDialog from 'components/Dialog/UploadFileDialog';
 import {COLUMNS, HIDE_COLUMNS} from 'layouts/hoso/components/columns';
-const handleSubmit = (e) => {
-  console.log('e:', e)
-  debugger;
-}
+
 const updateData = async (docId, newData) => {
   try {
     const docRef = doc(db, 'Documents', docId);
@@ -50,6 +47,14 @@ const UpdateDataModal = ({open, handleClose, documentId, documentData, refresh})
     handleClose();
   };
 
+const [dataNeededUpdate, setDataNeededUpdate] = useState({})
+const handleOnChange = (e) => {
+  setDataNeededUpdate({...dataNeededUpdate},e.target.values)
+}
+const handleSubmit = (e) => {
+  console.log(dataNeededUpdate)
+  debugger;
+}
   return (
     <Dialog open={open} onClose={handleClose} styles={{width: "300px"}} fullWidth>
       <DialogTitle>Sửa thông tin</DialogTitle>
@@ -74,6 +79,7 @@ const UpdateDataModal = ({open, handleClose, documentId, documentData, refresh})
                     value={documentData[item]}
                     variant="outlined"
                     fullWidth
+                    onChange = {()=>handleOnChange}
                     InputLabelProps={{shrink: true}}
                   />
                 </MDBox>
