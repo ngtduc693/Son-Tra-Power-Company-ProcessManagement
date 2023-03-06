@@ -58,4 +58,4 @@ export const COLUMNS = [
         accessor: 'BuocTiep',
     },
 ];
-export const HIDE_COLUMNS = ["Tep", "Ma"]
+export const HIDE_COLUMNS = ["Tep", "Ma", "Tao"]

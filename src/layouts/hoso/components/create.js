@@ -172,7 +172,7 @@ function CreateDocument() {
       CongSuatDeNghi: e.target[6].value,
       NgayNopHoSoDayDu: convertDateTimeStringToVnTime(e.target[8].value),
       TepDinhKemLucTaoHoSo: e.target[10].value,
-      //TaoBoi: (user)?user.user:"",
+      TaoBoi: (user)?user.user:"",
       NgayTao: getCurrentDate(),
       DonVi: user.branch,
     });

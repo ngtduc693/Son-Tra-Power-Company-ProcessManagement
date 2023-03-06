@@ -72,7 +72,7 @@ const UpdateDataModal = ({open, handleClose, documentId, documentData, refresh})
                     key={item}
                     name={item}
                     type="text"
-                    label={COLUMNS.filter((x) => x.accessor === item)[0].Header}
+                    label={COLUMNS.filter((x) => x.accessor === item)[0] && COLUMNS.filter((x) => x.accessor === item)[0].Header}
                     value={dataNeededUpdate[item]}
                     variant="outlined"
                     fullWidth
